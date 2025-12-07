@@ -1,7 +1,8 @@
 import React from "react";
-import useAuth from "../../hooks/useAuth";
+import useAuth from "../../../hooks/useAuth";
 import { toast } from "react-toastify";
 import { useLocation, useNavigate } from "react-router";
+
 
 const SocialLogin = () => {
 

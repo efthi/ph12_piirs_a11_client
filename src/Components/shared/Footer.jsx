@@ -1,6 +1,7 @@
 import { Link } from "react-router";
 import { FaFacebook, FaTwitter, FaLinkedin } from "react-icons/fa";
 import { AlertCircle } from "lucide-react";
+import logo from "../../assets/logo/logo_piirs_30070.png";
 
 const Footer = () => {
   return (
@@ -9,10 +10,9 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           <div>
             <div className="flex items-center space-x-2 mb-4">
-              <div className="bg-blue-600 p-2 rounded-lg">
-                <AlertCircle className="w-6 h-6" />
-              </div>
-              <span className="text-xl font-bold">Port City PIIRS</span>
+              <span className="text-xl font-bold">
+                <img src={logo} alt="logo" className="rounded-xl max-w-[80%] max-h-[20%]" />
+              </span>
             </div>
             <p className="text-gray-400">
               Making Chattogram better, one issue at a time.

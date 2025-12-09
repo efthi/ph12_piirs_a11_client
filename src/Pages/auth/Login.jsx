@@ -21,7 +21,7 @@ const Login = () => {
         <>
     <TitleNav></TitleNav>
       <Container>
-        <div className="flex flex-col-reverse md:flex-row justify-between">
+        <div className="flex flex-col-reverse md:flex-row gap-10 justify-between">
           <div className="flex-1">
             <img src={loginimage} alt="loginimage"
             className="rounded-3xl m-10 items-center"
@@ -35,8 +35,6 @@ const Login = () => {
                 </h2>
                 <form onSubmit={handleSubmit(handleRegister)}>
                   <fieldset>
-                    
-
                     <div className="form-control mt-4">
                       <label className="label">
                         <span className="label-text">Email</span>

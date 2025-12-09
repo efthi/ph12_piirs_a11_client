@@ -67,9 +67,9 @@ const Register = () => {
       console.log(Object.keys(err));
       
       console.log(err.code);
-      //console.log(err.name);
+      console.log(err.message);
       //console.log(err.customData);
-      toast.error(err.code);
+      toast.error(err.code && err.message);
     }
   };
   return (

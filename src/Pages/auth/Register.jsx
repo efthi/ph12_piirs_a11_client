@@ -27,52 +27,49 @@ const Register = () => {
   //user register function
   const handleRegister = async (data) => {
     try {
-      const profileImg = data.profilepic[0];
-      //console.log(data.name, data.email, data.password, profileImg);
-      await createUser(data.email, data.password).then(async (result) => {
-        console.log("result.user", result.user);
+      const profileImg = data.profilepic?.[0];
+      //console.log(data.name, data.email, data.password, profileImg.File);
+      //console.log(data.profilepic, data.profilepic.length);
 
-        //store image and get URL
+      const result = await createUser(data.email, data.password);
+      const newUser = result.user;
+      if (data.profilepic?.length > 0) {
         const getformData = new FormData();
         getformData.append("image", profileImg);
         const imageAPIURL = `https://api.imgbb.com/1/upload?key=${
           import.meta.env.VITE_IMGBB_KEY
         }`;
-        await axios.post(imageAPIURL, getformData).then((res) => {
-          //const resData = res.data.data;
-          const {
-            data: { data: imgData },
-          } = res; //এটা করেছি হুদাই যাতে data.data লেখা না লাগে
-          console.log(imgData.display_url);
-          if (imgData.display_url) {
-            updateProfile(result.user, {
-              displayName: data.name,
-              photoURL: imgData.display_url,
-            });
-            console.log(
-              "User Image uploaded and stored to firebase",
-              imgData.display_url
-            );
-          } else {
-            updateProfile(result.user, {
-              displayName: data.name,
-              photoURL:
-                "https://i.ibb.co.com/TDrgpc1p/character-avatar-isolated-729149-194801.jpg",
-            });
-            console.log(
-              "Default image stored to firebase",
-              imgData.display_url
-            );
-          }
+        const res = await axios.post(imageAPIURL, getformData);
+        const {
+          data: { data: imgData },
+        } = res; //এটা করেছি হুদাই যাতে data.data লেখা না লাগে
+
+        await updateProfile(newUser, {
+          displayName: data.name,
+          photoURL: imgData.display_url,
         });
-        result.user.photoURL;
-        toast.success("Clicked!");
-        logOut();
-        console.log(result.user);
-        
+      } else {
+        await updateProfile(newUser, {
+          displayName: data.name,
+          photoURL:
+            "https://i.ibb.co/TDrgpc1p/character-avatar-isolated-729149-194801.jpg",
+        });
+      }
+      //API তে ডেটা পাঠাচ্ছি
+      await axios.post('http://localhost:3000/storeuserdata', {
+        name: newUser.displayName,
+        email: newUser.email,
+        imgURL : newUser.photoURL,
       });
+      await logOut(); // User create হওয়ার পরে autologin ঠেকাতে
+      toast.success("Registration Successful! Please Login");
     } catch (err) {
-      console.error(err);
+      console.log(Object.keys(err));
+      
+      console.log(err.code);
+      //console.log(err.name);
+      //console.log(err.customData);
+      toast.error(err.code);
     }
   };
   return (

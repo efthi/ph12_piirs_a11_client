@@ -1,19 +1,31 @@
 import { useState } from 'react';
-import { Link , NavLink } from 'react-router';
+import { Link , NavLink, useNavigate } from 'react-router';
 import { Menu, X } from 'lucide-react';
+import useAuth from '../../hooks/useAuth';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   
   // Demo - পরে authentication থেকে আসবে
-  const user = {
-    name: "John Doe",
-    email: "john@example.com",
-    photo: "https://i.pravatar.cc/150?img=12"
+  // const user = {
+  //   name: "John Doe",
+  //   email: "john@example.com",
+  //   photo: "https://i.pravatar.cc/150?img=12"
+  // };
+  const {user, logOut} = useAuth();
+  const navigate = useNavigate();
+    const handleLogOut = async () => {
+    await logOut()
+    .then(()=>{
+        navigate('/');
+        console.log('Log out successful!');
+        
+    });
+    
   };
-  
-  const isLoggedIn = false; // Demo
+
+  const isLoggedIn = true; // Demo
 
   // Mobile menu toggle
   const toggleMenu = () => {
@@ -62,30 +74,30 @@ const Navbar = () => {
       
       {/* Profile/Login */}
       <div className="navbar-end">
-        {isLoggedIn ? (
+        {user ? (
           <div className="dropdown dropdown-end">
             <button 
               onClick={toggleProfile}
               className="btn btn-ghost btn-circle avatar"
             >
               <div className="w-10 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-                <img src={user.photo} alt={user.name} />
+                <img src={user?.photoURL} alt={user?.displayName} />
               </div>
             </button>
-            {isProfileOpen && (
+            {user && (
               <ul className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
                 <li className="menu-title">
-                  <span>{user.name}</span>
+                  <span>{user.displayName}</span>
                   <span className="text-xs opacity-60">{user.email}</span>
                 </li>
                 <li><Link to="/dashboard" onClick={() => setIsProfileOpen(false)}>Dashboard</Link></li>
-                <li><Link to="/profile" onClick={() => setIsProfileOpen(false)}>Profile</Link></li>
-                <li><button onClick={() => setIsProfileOpen(false)}>Logout</button></li>
+                <li><Link to="/dashboard/profile" onClick={() => setIsProfileOpen(false)}>Profile</Link></li>
+                <li><button onClick={()=>{handleLogOut()}} >Logout</button></li>
               </ul>
             )}
           </div>
         ) : (
-          <Link to="/login" className="btn btn-primary">Login</Link>
+          <Link to="/login" className="btn btn-primary">Login</Link> 
         )}
       </div>
 

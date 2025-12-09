@@ -1,12 +1,13 @@
-import React from 'react';
-import { useForm } from 'react-hook-form';
-import { toast } from 'react-toastify';
+import React from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 import Footer from "../../Components/shared/Footer";
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import TitleNav from "../../Components/shared/TitleNav";
-import Container from '../../Components/shared/Container';
-import SocialLogin from './SocialLogin/SocialLogin';
+import Container from "../../Components/shared/Container";
+import SocialLogin from "./SocialLogin/SocialLogin";
 import loginimage from "../../assets/images/login.png";
+import useAuth from "../../hooks/useAuth";
 
 const Login = () => {
   const {
@@ -14,17 +15,38 @@ const Login = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const handleRegister = () => {
-    toast.success("Clicked!");
+  const { signinUser } = useAuth();
+  //অন্য যে পেইজ থেকে আসবে সেটার location link ধরার জন্য
+  const location = useLocation();
+  //নির্ধারিত পেইজে navigate করার জন্য
+  const navigate = useNavigate();
+
+  const handleLogin = async (data) => {
+    try {
+      const res = await signinUser(data.email, data.password);
+      //console.log(res.user);
+      toast.success(`Login Successful! Welcome,${res.user.displayName}`);
+      navigate(location.state || "/dashboard");
+    } catch (err) {
+      // console.log(Object.keys(err));
+
+      // console.log(err.code);
+      // console.log(err.message);
+      // //console.log(err.customData);
+      console.log(err);
+      toast.error(err.message);
+    }
   };
-    return (
-        <>
-    <TitleNav></TitleNav>
+  return (
+    <>
+      <TitleNav></TitleNav>
       <Container>
         <div className="flex flex-col-reverse md:flex-row gap-10 justify-between">
           <div className="flex-1">
-            <img src={loginimage} alt="loginimage"
-            className="rounded-3xl m-10 items-center"
+            <img
+              src={loginimage}
+              alt="loginimage"
+              className="rounded-3xl m-10 items-center"
             />
           </div>
           <div className="flex-1 m-10">
@@ -33,7 +55,7 @@ const Login = () => {
                 <h2 className="card-title text-center text-primary mb-4">
                   Login
                 </h2>
-                <form onSubmit={handleSubmit(handleRegister)}>
+                <form onSubmit={handleSubmit(handleLogin)}>
                   <fieldset>
                     <div className="form-control mt-4">
                       <label className="label">
@@ -52,7 +74,6 @@ const Login = () => {
                         </div>
                       )}
                     </div>
-                    
 
                     <div className="form-control mt-4">
                       <label className="label">
@@ -81,9 +102,7 @@ const Login = () => {
                     </div>
 
                     <div className="form-control mt-6">
-                      <button className="btn btn-success w-full">
-                        Login
-                      </button>
+                      <button className="btn btn-success w-full">Login</button>
                     </div>
                     <p className="mt-5 p-3">
                       New User? Please
@@ -105,7 +124,7 @@ const Login = () => {
       </Container>
       <Footer></Footer>
     </>
-    );
+  );
 };
 
 export default Login;

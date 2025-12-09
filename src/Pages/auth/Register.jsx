@@ -7,18 +7,77 @@ import SocialLogin from "./SocialLogin/SocialLogin";
 import Container from "../../Components/shared/Container";
 import Footer from "../../Components/shared/Footer";
 import TitleNav from "../../Components/shared/TitleNav";
+import useAuth from "../../hooks/useAuth";
+import axios from "axios";
+import { updateProfile } from "firebase/auth";
+
 const Register = () => {
+  //page title
+
+  //use form hooks
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const handleRegister = () => {
-    toast.success("Clicked!");
+
+  //import useAuth hook
+  const { createUser, logOut } = useAuth();
+
+  //user register function
+  const handleRegister = async (data) => {
+    try {
+      const profileImg = data.profilepic[0];
+      //console.log(data.name, data.email, data.password, profileImg);
+      await createUser(data.email, data.password).then(async (result) => {
+        console.log("result.user", result.user);
+
+        //store image and get URL
+        const getformData = new FormData();
+        getformData.append("image", profileImg);
+        const imageAPIURL = `https://api.imgbb.com/1/upload?key=${
+          import.meta.env.VITE_IMGBB_KEY
+        }`;
+        await axios.post(imageAPIURL, getformData).then((res) => {
+          //const resData = res.data.data;
+          const {
+            data: { data: imgData },
+          } = res; //এটা করেছি হুদাই যাতে data.data লেখা না লাগে
+          console.log(imgData.display_url);
+          if (imgData.display_url) {
+            updateProfile(result.user, {
+              displayName: data.name,
+              photoURL: imgData.display_url,
+            });
+            console.log(
+              "User Image uploaded and stored to firebase",
+              imgData.display_url
+            );
+          } else {
+            updateProfile(result.user, {
+              displayName: data.name,
+              photoURL:
+                "https://i.ibb.co.com/TDrgpc1p/character-avatar-isolated-729149-194801.jpg",
+            });
+            console.log(
+              "Default image stored to firebase",
+              imgData.display_url
+            );
+          }
+        });
+        result.user.photoURL;
+        toast.success("Clicked!");
+        logOut();
+        console.log(result.user);
+        
+      });
+    } catch (err) {
+      console.error(err);
+    }
   };
   return (
     <>
-    <TitleNav></TitleNav>
+      <TitleNav></TitleNav>
       <Container>
         <div className="flex flex-col-reverse md:flex-row justify-between">
           <div className="flex-1 m-10">
@@ -119,8 +178,10 @@ const Register = () => {
             </div>
           </div>
           <div className="flex-1">
-            <img src={registerimage} alt="registerimage"
-            className="rounded-3xl m-10 items-center"
+            <img
+              src={registerimage}
+              alt="registerimage"
+              className="rounded-3xl m-10 items-center"
             />
           </div>
         </div>

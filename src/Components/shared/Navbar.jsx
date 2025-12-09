@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router';
+import { Link , NavLink } from 'react-router';
 import { Menu, X } from 'lucide-react';
 
 const Navbar = () => {
@@ -13,7 +13,7 @@ const Navbar = () => {
     photo: "https://i.pravatar.cc/150?img=12"
   };
   
-  const isLoggedIn = true; // Demo
+  const isLoggedIn = false; // Demo
 
   // Mobile menu toggle
   const toggleMenu = () => {
@@ -52,10 +52,11 @@ const Navbar = () => {
       {/* Desktop Menu */}
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1 gap-2">
-          <li><Link to="/">Home</Link></li>
-          <li><Link to="/all-issues">All Issues</Link></li>
-          <li><Link to="/about">About</Link></li>
-          <li><Link to="/contact">Contact</Link></li>
+          <li><NavLink to="/register">Register</NavLink></li>
+          <li><NavLink to="/all-issues">All Issues</NavLink></li>
+          <li><NavLink to="/">Home</NavLink></li>
+          <li><NavLink to="/about">About</NavLink></li>
+          <li><NavLink to="/contact">Contact</NavLink></li>
         </ul>
       </div>
       

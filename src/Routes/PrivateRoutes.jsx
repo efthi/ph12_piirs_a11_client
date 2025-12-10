@@ -1,19 +1,30 @@
-import React from 'react';
-import useAuth from '../hooks/useAuth';
-import { Navigate, useLocation } from 'react-router';
-import Loader from '../components/shared/Loader';
+import React from "react";
+import useAuth from "../hooks/useAuth";
+import { Navigate, useLocation } from "react-router";
+import Loader from "../components/shared/Loader";
 
-const PrivateRoutes = ({children}) => {
-    
-    const {user, loading} = useAuth();
-    let location = useLocation();
-    if(user){
-        return children;
-    }
-    if(loading){
-        return <Loader></Loader>;
-    }
-    return <Navigate state={location?.pathname} to="/login"></Navigate>;
+const PrivateRoutes = ({ children }) => {
+  const { user, authload } = useAuth();
+  let location = useLocation();
+
+  // ১) আগে loading check
+  if (authload) {
+    return <Loader />;
+  }
+
+  // ২) তারপর user check
+  if (user) {
+    return children;
+  }
+
+  // ৩) logged in না হলে login এ পাঠাও
+  return (
+    <Navigate
+      to="/login"
+      state={{ from: location }}
+      replace
+    />
+  );
 };
 
 export default PrivateRoutes;

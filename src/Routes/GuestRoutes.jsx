@@ -1,17 +1,17 @@
 import React from "react";
 import useAuth from "../hooks/useAuth";
 import { Navigate, useLocation } from "react-router";
-import Loader from "../components/shared/Loader";
+import Loader from "../Components/shared/Loader";
 
 const GuestRoutes = ({ children }) => {
   const { user, authload } = useAuth();
-  let backto = useLocation();
+//  let location = useLocation();
   if (authload) {
     return <Loader></Loader>;
   }
   if (user) {
-    const backto = location.state?.from?.pathname || "/";
-    return <Navigate to={backto} replace></Navigate>;
+    const backTo = "/dashboard";
+    return <Navigate to={backTo} replace></Navigate>;
   }
 
   return children;

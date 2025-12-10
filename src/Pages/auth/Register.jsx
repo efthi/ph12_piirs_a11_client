@@ -23,8 +23,7 @@ const Register = () => {
 
   //import useAuth hook
   const { createUser, logOut } = useAuth();
-  //to get user
-  const comeFrom = useLocation();
+
   //user redirection
   const sendTo = useNavigate();
   //user register function
@@ -59,21 +58,35 @@ const Register = () => {
         });
       }
       //API তে ডেটা পাঠাচ্ছি
-      await axios.post('http://localhost:3000/storeuserdata', {
+      await axios.post("http://localhost:3000/storeuserdata", {
+        uid: newUser.uid,
         name: newUser.displayName,
         email: newUser.email,
-        imgURL : newUser.photoURL,
+        imgURL: newUser.photoURL,
+        role: "citizen",
+        createdAt: new Date(),
+        isBlocked: false,
       });
       await logOut(); // User create হওয়ার পরে autologin ঠেকাতে
       toast.success("Registration Successful! Please Login");
-      sendTo(comeFrom?.state ||'/dashboard');
+      sendTo("/login");
     } catch (err) {
       console.log(Object.keys(err));
-      
+
       console.log(err.code);
       console.log(err.message);
-      //console.log(err.customData);
-      toast.error(err.code && err.message);
+      console.error("Registration Error:", err);
+
+      // Specific error messages
+      if (err.code === "auth/email-already-in-use") {
+        toast.error("Email already registered!");
+      } else if (err.code === "auth/weak-password") {
+        toast.error("Password is too weak!");
+      } else if (err.code === "auth/invalid-email") {
+        toast.error("Invalid email format!");
+      } else {
+        toast.error(err.message || "Registration failed");
+      }
     }
   };
   return (

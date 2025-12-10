@@ -16,18 +16,26 @@ export const router = createBrowserRouter([
     errorElement: <ErrorPage></ErrorPage>,
     children: [
       { path: "/", element: <Home></Home>, index: true },
-      { path: "all-issues", element: "<p>All Issue Page</p>" },
-      { path: "about", element: "<p>About Page</p>" },
-      { path: "contact", element: "<p>Contact Page</p>" },
+      { path: "all-issues", element: <p>All Issue Page</p> },
+      { path: "about", element: <p>About Page</p> },
+      { path: "contact", element: <p>Contact Page</p> },
     ],
   },
   {
     path: "register",
-    element: <GuestRoutes><Register></Register></GuestRoutes> ,
+    element: (
+      <GuestRoutes>
+        <Register></Register>
+      </GuestRoutes>
+    ),
   },
   {
     path: "login",
-    element: <GuestRoutes><Login></Login></GuestRoutes>,
+    element: (
+      <GuestRoutes>
+        <Login></Login>
+      </GuestRoutes>
+    ),
   },
   {
     path: "*",
@@ -35,9 +43,15 @@ export const router = createBrowserRouter([
   },
   {
     path: "dashboard",
-    element: <PrivateRoutes><DashboardLayout></DashboardLayout></PrivateRoutes>,
-    children: [{ element: <Welcome></Welcome>, index: true },
-      {path:"profile", element:'<p>Profile Page</p>'},
+    element: (
+      <PrivateRoutes>
+        <DashboardLayout></DashboardLayout>
+      </PrivateRoutes>
+    ),
+    children: [
+      { element: <Welcome></Welcome>, index: true },
+      { path: "/dashboard/my-issues", element: <p>My Issue Page</p> },
+      { path: "profile", element: "<p>Profile Page</p>" },
     ],
   },
 ]);

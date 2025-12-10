@@ -64,9 +64,10 @@ const Navbar = () => {
       {/* Desktop Menu */}
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1 gap-2">
+          <li><NavLink to="/">Home</NavLink></li>
           <li>{user ? (<NavLink to="/dashboard">Dashboard</NavLink>) : (<NavLink to="/register">Register</NavLink>)}</li>
           <li><NavLink to="/all-issues">All Issues</NavLink></li>
-          <li><NavLink to="/">Home</NavLink></li>
+          <li><NavLink to="/dashboard/my-issues">My Issues</NavLink></li>
           <li><NavLink to="/about">About</NavLink></li>
           <li><NavLink to="/contact">Contact</NavLink></li>
         </ul>

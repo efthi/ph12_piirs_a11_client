@@ -3,6 +3,8 @@ import Home from "../../pages/Home";
 import Navbar from "../../components/shared/Navbar";
 import { Outlet } from "react-router";
 import Footer from "../../components/shared/Footer";
+import useAuth from "../../hooks/useAuth";
+
 
 const MainLayout = () => {
   return (

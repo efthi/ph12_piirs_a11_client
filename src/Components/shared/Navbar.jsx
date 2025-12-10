@@ -64,13 +64,13 @@ const Navbar = () => {
       {/* Desktop Menu */}
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1 gap-2">
-          <li><NavLink to="/" className={({isActive})=> isActive ? "btn btn-outline btn-accent" : ""}>Home</NavLink></li>
-          <li>{user ? (<NavLink to="/dashboard" className={({isActive})=> isActive ? "btn btn-outline btn-accent" : ""}>Dashboard</NavLink>) : 
-          (<NavLink to="/register" className={({isActive})=> isActive ? "btn btn-outline btn-accent" : ""}>Register</NavLink>)}</li>
-          <li><NavLink to="/all-issues" className={({isActive})=> isActive ? "btn btn-outline btn-accent" : ""}>All Issues</NavLink></li>
-          <li><NavLink to="/dashboard/my-issues" className={({isActive})=> isActive ? "btn btn-outline btn-accent" : ""} >My Issues</NavLink></li>
-          <li><NavLink to="/about" className={({isActive})=> isActive ? "btn btn-outline btn-accent" : ""}>About</NavLink></li>
-          <li><NavLink to="/contact" className={({isActive})=> isActive ? "btn btn-outline btn-accent" : ""}>Contact</NavLink></li>
+          <li><NavLink to="/" className={({isActive})=> isActive ? "btn btn-outline btn-secondary" : ""}>Home</NavLink></li>
+          <li>{user ? (<NavLink to="/dashboard" className={({isActive})=> isActive ? "btn btn-outline btn-secondary" : ""}>Dashboard</NavLink>) : 
+          (<NavLink to="/register" className={({isActive})=> isActive ? "btn btn-outline btn-secondary" : ""}>Register</NavLink>)}</li>
+          <li><NavLink to="/all-issues" className={({isActive})=> isActive ? "btn btn-outline btn-secondary" : ""}>All Issues</NavLink></li>
+          <li><NavLink to="/dashboard/my-issues" className={({isActive})=> isActive ? "btn btn-outline btn-secondary" : ""} >My Issues</NavLink></li>
+          <li><NavLink to="/about" className={({isActive})=> isActive ? "btn btn-outline btn-secondary" : ""}>About</NavLink></li>
+          <li><NavLink to="/contact" className={({isActive})=> isActive ? "btn btn-outline btn-secondary" : ""}>Contact</NavLink></li>
         </ul>
       </div>
       

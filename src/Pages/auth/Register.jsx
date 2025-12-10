@@ -1,7 +1,7 @@
 import React from "react";
 import registerimage from "../../assets/images/register.png";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import SocialLogin from "./SocialLogin/SocialLogin";
 import Container from "../../Components/shared/Container";
@@ -23,7 +23,10 @@ const Register = () => {
 
   //import useAuth hook
   const { createUser, logOut } = useAuth();
-
+  //to get user
+  const comeFrom = useLocation();
+  //user redirection
+  const sendTo = useNavigate();
   //user register function
   const handleRegister = async (data) => {
     try {
@@ -63,6 +66,7 @@ const Register = () => {
       });
       await logOut(); // User create হওয়ার পরে autologin ঠেকাতে
       toast.success("Registration Successful! Please Login");
+      sendTo(comeFrom?.state ||'/dashboard');
     } catch (err) {
       console.log(Object.keys(err));
       

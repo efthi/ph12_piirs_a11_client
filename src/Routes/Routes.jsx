@@ -9,6 +9,7 @@ import Welcome from "../Pages/dashboard/Welcome";
 import PrivateRoutes from "./PrivateRoutes";
 import GuestRoutes from "./GuestRoutes";
 import ReportIssue from "../Pages/dashboard/ReportIssue";
+import AllIssues from "../Pages/AllIssues";
 
 export const router = createBrowserRouter([
   {
@@ -17,7 +18,7 @@ export const router = createBrowserRouter([
     errorElement: <ErrorPage></ErrorPage>,
     children: [
       { path: "/", element: <Home></Home>, index: true },
-      { path: "all-issues", element: <p>All Issue Page</p> },
+      { path: "all-issues", element: <AllIssues></AllIssues> },
       { path: "about", element: <p>About Page</p> },
       { path: "contact", element: <p>Contact Page</p> },
     ],

@@ -53,7 +53,7 @@ export const router = createBrowserRouter([
     children: [
       { element: <Welcome></Welcome>, index: true },
       { path: "my-issues", element: <p>My Issue Page</p> },
-      { path: "profile", element: "<p>Profile Page</p>" },
+      { path: "profile", element: <p>Profile Page</p> },
       { path: "report-issue", element: <ReportIssue></ReportIssue> },
     ],
   },

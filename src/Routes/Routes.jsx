@@ -12,6 +12,7 @@ import ReportIssue from "../Pages/dashboard/ReportIssue";
 import AllIssues from "../Pages/AllIssues";
 import PaymentOk from "../Pages/Payment/PaymentOk";
 import PaymentFail from "../Pages/Payment/PaymentFail";
+import Profile from "../Pages/dashboard/Profile";
 
 export const router = createBrowserRouter([
   {
@@ -55,7 +56,7 @@ export const router = createBrowserRouter([
     children: [
       { element: <PrivateRoutes><Welcome></Welcome></PrivateRoutes>, index: true },
       { path: "my-issues", element: <PrivateRoutes><h1 className="text-center text-2xl font-bold mb-6">My Issue Page from routes</h1></PrivateRoutes> },
-      { path: "profile", element: <PrivateRoutes> <h1 className="text-center text-2xl font-bold mb-6">Profile Page from routes</h1></PrivateRoutes> },
+      { path: "profile", element: <PrivateRoutes> <Profile></Profile> </PrivateRoutes> },
       { path: "report-issue", element: <ReportIssue></ReportIssue> },
       {path:"view-issue/:id", element: <h1 className="text-center text-2xl font-bold mb-6">View Issue from routes</h1> ,},
       {path:"edit-issue/:id", element: <h1 className="text-center text-2xl font-bold mb-6">Edit Issue from routes</h1> ,},

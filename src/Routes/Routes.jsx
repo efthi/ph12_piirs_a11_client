@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router";
 import MainLayout from "../Layout/MainLayout/MainLayout";
-import Home from "../Pages/Home";
+import Home from "../pages/Home";
 import Register from "../Pages/auth/Register";
 import Login from "../Pages/auth/Login";
 import DashboardLayout from "../Layout/Dashboard/DashboardLayout";
@@ -10,6 +10,8 @@ import PrivateRoutes from "./PrivateRoutes";
 import GuestRoutes from "./GuestRoutes";
 import ReportIssue from "../Pages/dashboard/ReportIssue";
 import AllIssues from "../Pages/AllIssues";
+import PaymentOk from "../Pages/Payment/PaymentOk";
+import PaymentFail from "../Pages/Payment/PaymentFail";
 
 export const router = createBrowserRouter([
   {
@@ -19,8 +21,8 @@ export const router = createBrowserRouter([
     children: [
       { path: "/", element: <Home></Home>, index: true },
       { path: "all-issues", element: <AllIssues></AllIssues> },
-      { path: "about", element: <p>About Page</p> },
-      { path: "contact", element: <p>Contact Page</p> },
+      { path: "about", element: <p className="text-center text-2xl font-bold mb-6">About Page</p> },
+      { path: "contact", element: <p className="text-center text-2xl font-bold mb-6">Contact Page</p> },
     ],
   },
   {
@@ -51,10 +53,15 @@ export const router = createBrowserRouter([
       </PrivateRoutes>
     ),
     children: [
-      { element: <Welcome></Welcome>, index: true },
-      { path: "my-issues", element: <p>My Issue Page</p> },
-      { path: "profile", element: <p>Profile Page</p> },
+      { element: <PrivateRoutes><Welcome></Welcome></PrivateRoutes>, index: true },
+      { path: "my-issues", element: <PrivateRoutes><h1 className="text-center text-2xl font-bold mb-6">My Issue Page from routes</h1></PrivateRoutes> },
+      { path: "profile", element: <PrivateRoutes> <h1 className="text-center text-2xl font-bold mb-6">Profile Page from routes</h1></PrivateRoutes> },
       { path: "report-issue", element: <ReportIssue></ReportIssue> },
+      {path:"view-issue/:id", element: <h1 className="text-center text-2xl font-bold mb-6">View Issue from routes</h1> ,},
+      {path:"edit-issue/:id", element: <h1 className="text-center text-2xl font-bold mb-6">Edit Issue from routes</h1> ,},
+      {path:"payment-success", element: <PaymentOk></PaymentOk>,},
+      {path:"payment-cancel", element: <PaymentFail></PaymentFail> ,},
     ],
   },
+
 ]);

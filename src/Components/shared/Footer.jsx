@@ -1,7 +1,7 @@
 import { Link } from "react-router";
 import { FaFacebook, FaTwitter, FaLinkedin } from "react-icons/fa";
 import { AlertCircle } from "lucide-react";
-import logo from "../../assets/logo/logo_piirs_30070.png";
+import logo from "../../assets/logo/port-city-piirs-logo_neon.png";
 
 const Footer = () => {
   return (

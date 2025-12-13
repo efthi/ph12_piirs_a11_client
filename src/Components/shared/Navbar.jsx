@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link , NavLink, useNavigate } from 'react-router';
 import { Menu, X } from 'lucide-react';
 import useAuth from '../../hooks/useAuth';
+import logo from '../../assets/logo/port-city-piirs-logo_neon.png';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -56,8 +57,8 @@ const Navbar = () => {
         </div>
         
         {/* Logo */}
-        <Link to="/" className="btn btn-ghost text-xl font-bold">
-          <span className="text-primary">Port City</span> PIIRS
+        <Link to="/" className="">
+          <img src={logo} alt="" width="300px" height="50px" />
         </Link>
       </div>
       

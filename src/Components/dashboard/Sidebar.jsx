@@ -13,6 +13,7 @@ import {
   LogOut,
 } from "lucide-react";
 import useAuth from "../../hooks/useAuth";
+import testimage from "../../assets/logo/port-city-piirs-logo_neon.png";
 
 const Sidebar = () => {
   const location = useLocation();
@@ -84,13 +85,14 @@ const Sidebar = () => {
           to="/"
           className="flex items-center gap-3 hover:opacity-80 transition"
         >
-          <div className="bg-primary p-2 rounded-lg">
+          {/* <div className="bg-primary p-2 rounded-lg">
             <AlertCircle className="text-primary-content" size={24} />
-          </div>
-          <div>
+          </div> */}
+            <img src={testimage} alt="" />
+          {/* <div>
             <h2 className="font-bold text-lg">Port City PIIRS</h2>
             <p className="text-xs opacity-60 capitalize">{userRole} Panel</p>
-          </div>
+          </div> */}
         </Link>
       </div>
 

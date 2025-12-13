@@ -70,7 +70,7 @@ const IssueCard = ({ issue }) => {
             <span className="font-bold">{upvotes}</span>
           </button>
           
-          <Link to={`/issue/${_id}`} className="btn btn-sm btn-primary">
+          <Link to={`/view-issue/${_id}`} className="btn btn-sm btn-primary">
             View Details
           </Link>
         </div>

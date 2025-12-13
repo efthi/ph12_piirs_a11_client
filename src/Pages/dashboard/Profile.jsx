@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
+import axios, { Axios } from "axios";
 import { 
   User, 
   Mail, 
@@ -91,11 +91,31 @@ const Profile = () => {
     });
   };
 
-  // Handle subscription
-  const handleSubscribe = async () => {
-    toast.info("Redirecting to payment...");
-    // Stripe payment integration করবে পরে
-  };
+const handleSubscribe = async () => {
+  try {
+    const paymentInfo = {
+      uuid: user.uuid,
+      name: user?.displayName,
+      amount: 100,
+      quantity: 1,
+      // priceId: 'price_...' // চাইলে client থেকে পাঠান
+    };
+
+    const res = await axios.post('http://localhost:3000/create-checkout-sessions', paymentInfo);
+    console.log(res.data);
+    
+    if (res.data && res.data.url) {
+      window.location.href = res.data.url; // redirect to Stripe hosted checkout
+    } else {
+      console.error('Unexpected server response:', res.data);
+      // show user friendly message
+    }
+  } catch (err) {
+    console.error('Payment error:', err.response ? err.response.data : err.message);
+    
+  }
+};
+
 
   return (
     <div className="max-w-4xl mx-auto">

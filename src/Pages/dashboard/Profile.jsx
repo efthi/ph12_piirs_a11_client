@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios, { Axios } from "axios";
 import { 
   User, 
@@ -14,12 +14,16 @@ import {
   AlertTriangle
 } from "lucide-react";
 import useAuth from "../../hooks/useAuth";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+import { updateProfile } from "firebase/auth";
+
 
 const Profile = () => {
-  const { user, userData, updateProfile } = useAuth();
+  const { user } = useAuth();
   const queryClient = useQueryClient();
   const [isEditing, setIsEditing] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const axiosSec = useAxiosSecure();
 
   const {
     register,
@@ -30,20 +34,33 @@ const Profile = () => {
       name: user?.displayName || "",
     },
   });
+  //get userData from DB
+  const {data, isLoading, error} = useQuery({
+    queryKey: ['profile-data'],
+    queryFn : async () => {
+      const res = await axiosSec.get(`/api/get-user-data/${user.email}`);
+      console.log(res.data);
+      return res.data;
+    }
+  });
+
+  const userData = data || []
+
 
   // Update profile mutation
   const updateProfileMutation = useMutation({
     mutationFn: async (data) => {
       // Update Firebase
-      await updateProfile(auth.currentUser, {
+      await updateProfile(user, {
         displayName: data.name,
         photoURL: data.photoURL || user.photoURL,
       });
 
       // Update MongoDB
       const response = await axios.patch(
-        `http://localhost:3000/api/user/${user.uid}`,
+        `http://localhost:3000/api/update-user/`,
         {
+          uid: user.uid,
           name: data.name,
           imgURL: data.photoURL || user.photoURL,
         }
@@ -94,7 +111,7 @@ const Profile = () => {
 const handleSubscribe = async () => {
   try {
     const paymentInfo = {
-      uuid: user.uuid,
+      uid: user.uid,
       name: user?.displayName,
       amount: 100,
       quantity: 1,
@@ -150,7 +167,7 @@ const handleSubscribe = async () => {
                 <div className="w-32 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
                   <img src={user?.photoURL} alt={user?.displayName} />
                 </div>
-                {userData?.isPremium && (
+                {userData?.isPremium ? (<></>) : (
                   <div className="absolute -bottom-2 left-1/2 -translate-x-1/2">
                     <span className="badge badge-secondary gap-1">
                       <Crown size={14} />

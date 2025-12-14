@@ -14,6 +14,7 @@ import PaymentOk from "../Pages/Payment/PaymentOk";
 import PaymentFail from "../Pages/Payment/PaymentFail";
 import Profile from "../Pages/dashboard/Profile";
 import IssueDetails from "../Pages/IssueDetails";
+import MyIssues from "../Pages/dashboard/MyIssues";
 
 export const router = createBrowserRouter([
   {
@@ -56,15 +57,16 @@ export const router = createBrowserRouter([
     ),
     children: [
       { element: <PrivateRoutes><Welcome></Welcome></PrivateRoutes>, index: true },
-      { path: "my-issues", element: <PrivateRoutes><h1 className="text-center text-2xl font-bold mb-6">My Issue Page from routes</h1></PrivateRoutes> },
+      { path: "my-issues", element: <MyIssues></MyIssues> },
       { path: "profile", element: <PrivateRoutes> <Profile></Profile> </PrivateRoutes> },
       { path: "report-issue", element: <ReportIssue></ReportIssue> },
       
       {path:"edit-issue/:id", element: <h1 className="text-center text-2xl font-bold mb-6">Edit Issue from routes</h1> ,},
       {path:"payment-success/", element: <PaymentOk></PaymentOk>,},
       {path:"payment-cancel", element: <PaymentFail></PaymentFail> ,},
+      {path:"view-issue/:id", element: <IssueDetails></IssueDetails> ,},
+      
     ],
   },
-  {path:"view-issue/:id", element: <IssueDetails></IssueDetails> ,},
 
 ]);

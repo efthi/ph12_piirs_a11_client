@@ -1,5 +1,3 @@
-// src/components/issues/IssueTimeline.jsx
-
 import React from "react";
 import { CheckCircle, Clock, User, AlertCircle } from "lucide-react";
 

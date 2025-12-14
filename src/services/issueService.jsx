@@ -1,4 +1,3 @@
-// src/services/issueService.js
 
 import axios from "axios";
 
@@ -18,6 +17,6 @@ export const deleteIssue = async (id) => {
 
 // Toggle upvote (already have)
 export const toggleUpvote = async ({ issueId, userId }) => {
-  const response = await axios.put(`/api/issues/${issueId}/upvote`, { userId });
+  const response = await axios.put(`${import.meta.env.VITE_API_URL}/api/issues/${issueId}/upvote`, { userId });
   return response.data;
 };

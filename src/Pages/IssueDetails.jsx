@@ -14,29 +14,25 @@ import {
   AlertCircle
 } from "lucide-react";
 import useAuth from "../hooks/useAuth";
-import { getIssueById, deleteIssue, toggleUpvote } from "../services/issueService";
+import { deleteIssue, toggleUpvote } from "../services/issueService";
 import IssueTimeline from "../components/issues/IssueTimeline";
-import axios from "axios";
+
+import useAxiosSecure from "../hooks/useAxiosSecure";
 
 const IssueDetails = () => {
   const { id } = useParams(); // Get issue ID from URL
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { user, userData } = useAuth();
-
+  const axiosSec = useAxiosSecure();
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
-//   // Fetch issue details
-//   const { data, isLoading, error } = useQuery({
-//     queryKey: ['issue', id],
-//     queryFn: () => getIssueById(id),
-//   });
 
 // TanStack Query - replaces useEffect + useState
   const { data, isLoading, error, } = useQuery({
     queryKey: ['view-issue'], // Unique key for this query
     queryFn: async () =>{
-        const response = await axios.get(`http://localhost:3000/api/issue/${id}`);
+        const response = await axiosSec.get(`/api/issue/${id}`);
         console.log(response.data);
         
       return response.data;
@@ -190,6 +186,7 @@ const IssueDetails = () => {
 
               {/* Title */}
               <h1 className="card-title text-3xl mb-4">{issue.title}</h1>
+              <h2 className="card-title text-xl mb-4">{issue.tracking}</h2>
 
               {/* Description */}
               <div className="prose max-w-none">

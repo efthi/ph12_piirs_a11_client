@@ -44,7 +44,7 @@ const Profile = () => {
     }
   });
 
-  const userData = data || []
+  const userData = data || [];
 
 
   // Update profile mutation

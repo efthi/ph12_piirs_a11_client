@@ -17,16 +17,17 @@ const MyIssues = () => {
 
   const {user} = useAuth();
   const axiosSec = useAxiosSecure();
+  
   const {data, isLoading, error} = useQuery({
-    queryKey: ['my-issues', user?.email],
-    queryFn: async() => {
-        const email =user.email;
-        const res = await axiosSec.get(`/api/issues-by-user?email=${user.email}`);
-        return res.data;
+    queryKey:['my-issues', user?.email],
+    queryFn: async () => {
+      const res = await axiosSec.get(`/api/issues-by-user/${user.email}`);
+      return res.data;
     },
+    enabled: !!user?.email,
   });
-const test = data;
-console.log(test);
+
+  const issues = data || [];
 
   // Demo data - পরে API থেকে আসবে
   const demoIssues = [
@@ -111,7 +112,7 @@ console.log(test);
         <div className="stats shadow">
           <div className="stat">
             <div className="stat-title">Total Issues</div>
-            <div className="stat-value text-primary">3</div>
+            <div className="stat-value text-primary">{issues.length}</div>
           </div>
         </div>
         <div className="stats shadow">
@@ -216,7 +217,7 @@ console.log(test);
 
       {/* Issues List */}
       <div className="space-y-4">
-        {demoIssues.length === 0 ? (
+        {issues.length === 0 ? (
           /* Empty State */
           <div className="card bg-base-100 shadow-xl">
             <div className="card-body items-center text-center py-16">
@@ -233,7 +234,7 @@ console.log(test);
           </div>
         ) : (
           /* Issues Cards */
-          demoIssues.map((issue) => (
+          issues.map((issue) => (
             <div key={issue._id} className="card bg-base-100 shadow-md hover:shadow-xl transition-all">
               <div className="card-body">
                 <div className="flex flex-col lg:flex-row gap-4">
@@ -281,7 +282,7 @@ console.log(test);
                     {/* Actions */}
                     <div className="flex flex-wrap gap-2">
                       <Link
-                        to={`/issue/${issue._id}`}
+                        to={`/dashboard/view-issue/${issue._id}`}
                         className="btn btn-sm btn-primary gap-2"
                       >
                         <Eye size={16} />

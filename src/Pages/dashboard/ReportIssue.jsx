@@ -5,6 +5,8 @@ import { useNavigate } from "react-router";
 import axios from "axios";
 import useAuth from "../../hooks/useAuth";
 import { Upload, MapPin, FileText, AlertCircle } from "lucide-react";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+import { useQuery } from "@tanstack/react-query";
 
 const ReportIssue = () => {
   const {
@@ -14,11 +16,25 @@ const ReportIssue = () => {
     reset,
   } = useForm();
 
-  const { user, userData } = useAuth(); // Firebase user + MongoDB userData
+  const axiosSec = useAxiosSecure();
+  const { user } = useAuth(); // Firebase user + MongoDB userData
   const navigate = useNavigate();
   const [uploading, setUploading] = useState(false);
   const [imagePreview, setImagePreview] = useState(null);
+  
+  //get userData from DB
+  const {data, isLoading, error} = useQuery({
+    queryKey: ['user-data-for-new', user?.email],
+    queryFn : async () => {
+      const res = await axiosSec.get(`/api/get-user-data/${user.email}`);
+      console.log(res.data);
+      return res.data;
+    }
+  });
 
+  const userData = data || [] ;
+
+  
   // Check issue limit for free users
   const canReportIssue = () => {
     if (userData?.isPremium) {
@@ -95,11 +111,11 @@ const ReportIssue = () => {
       };
 
       // Save to MongoDB
-      const response = await axios.post(
-        "http://localhost:3000/api/record-issue",
+      const response = await axiosSec.post(
+        "/api/record-issue",
         issueData
       );
-
+      console.log(response);
       if (response.data.success) {
         toast.success("Issue reported successfully!");
         reset();

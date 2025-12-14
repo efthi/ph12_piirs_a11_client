@@ -58,7 +58,7 @@ const Register = () => {
         });
       }
       //API তে ডেটা পাঠাচ্ছি
-      await axios.post("http://localhost:3000/storeuserdata", {
+      await axios.post(`${import.meta.env.VITE_API_URL}/storeuserdata`, {
         uid: newUser.uid,
         name: newUser.displayName,
         email: newUser.email,
@@ -66,6 +66,7 @@ const Register = () => {
         role: "citizen",
         createdAt: new Date(),
         isBlocked: false,
+        isPremium:false,
       });
       await logOut(); // User create হওয়ার পরে autologin ঠেকাতে
       toast.success("Registration Successful! Please Login");

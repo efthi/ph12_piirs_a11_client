@@ -7,6 +7,7 @@ import useAuth from "../../hooks/useAuth";
 import { Upload, MapPin, FileText, AlertCircle } from "lucide-react";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
+import Swal from 'sweetalert2'
 
 const ReportIssue = () => {
   const {
@@ -21,26 +22,40 @@ const ReportIssue = () => {
   const navigate = useNavigate();
   const [uploading, setUploading] = useState(false);
   const [imagePreview, setImagePreview] = useState(null);
-  
+
   //get userData from DB
-  const {data, isLoading, error} = useQuery({
-    queryKey: ['user-data-for-new', user?.email],
-    queryFn : async () => {
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["user-data-for-new", user?.email],
+    queryFn: async () => {
       const res = await axiosSec.get(`/api/get-user-data/${user.email}`);
       console.log(res.data);
       return res.data;
-    }
+    },
   });
 
-  const userData = data || [] ;
+  const userData = data || [];
 
-  
+  const {
+    data: userIssue = [],
+    isLoading: issueloading,
+    error: issueError,
+  } = useQuery({
+    queryKey: ["issues-by-user", user?.email],
+    queryFn: async () => {
+      const res = await axiosSec.get(`/api/issues-by-user/${user.email}`);
+      return res.data;
+    },
+    enabled: !!user?.email,
+  });
+
+  console.log(userIssue?.length);
+
   // Check issue limit for free users
   const canReportIssue = () => {
     if (userData?.isPremium) {
       return true; // Premium users = unlimited
     }
-    return (userData?.issueCount || 0) < 3; // Free users = max 3
+    return (userIssue?.length || 0) < 3; // Free users = max 3
   };
 
   // Handle image preview
@@ -59,7 +74,9 @@ const ReportIssue = () => {
   const handleReportIssue = async (data) => {
     // Check issue limit
     if (!canReportIssue()) {
-      toast.error("Free users can only report 3 issues. Please subscribe to premium!");
+      toast.error(
+        "Free users can only report 3 issues. Please subscribe to premium!"
+      );
       navigate("/dashboard/profile");
       return;
     }
@@ -73,11 +90,11 @@ const ReportIssue = () => {
       if (data.image?.[0]) {
         const formData = new FormData();
         formData.append("image", data.image[0]);
-        
+
         const imageAPIURL = `https://api.imgbb.com/1/upload?key=${
           import.meta.env.VITE_IMGBB_KEY
         }`;
-        
+
         const imgResponse = await axios.post(imageAPIURL, formData);
         imageURL = imgResponse.data.data.display_url;
       }
@@ -111,13 +128,14 @@ const ReportIssue = () => {
       };
 
       // Save to MongoDB
-      const response = await axiosSec.post(
-        "/api/record-issue",
-        issueData
-      );
+      const response = await axiosSec.post("/api/record-issue", issueData);
       console.log(response);
       if (response.data.success) {
-        toast.success("Issue reported successfully!");
+        Swal.fire({
+          title: "Issue Recorded!",
+          text: "Authority will check your issue.",
+          icon: "success",
+        });
         reset();
         setImagePreview(null);
         navigate("/dashboard/my-issues");
@@ -138,14 +156,14 @@ const ReportIssue = () => {
         <p className="text-base-content/70">
           Help us improve Port City by reporting infrastructure problems
         </p>
-        
+
         {/* Issue Limit Warning */}
         {!userData?.isPremium && (
           <div className="alert alert-warning mt-4">
             <AlertCircle size={20} />
             <span>
               Free users can report up to 3 issues. You have reported{" "}
-              <strong>{userData?.issueCount || 0}/3</strong> issues.
+              <strong>{userIssue?.length || 0}/3</strong> issues.
             </span>
           </div>
         )}
@@ -359,7 +377,9 @@ const ReportIssue = () => {
           <li>Be specific and clear in your title</li>
           <li>Provide detailed description of the problem</li>
           <li>Include exact location for quick resolution</li>
-          <li>Upload a photo if possible (helps authorities understand better)</li>
+          <li>
+            Upload a photo if possible (helps authorities understand better)
+          </li>
           <li>Check if the issue is already reported before submitting</li>
         </ul>
       </div>

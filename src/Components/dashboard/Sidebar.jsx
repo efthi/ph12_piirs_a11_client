@@ -14,6 +14,8 @@ import {
 } from "lucide-react";
 import useAuth from "../../hooks/useAuth";
 import testimage from "../../assets/logo/port-city-piirs-logo_neon.png";
+import { useQuery } from "@tanstack/react-query";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const Sidebar = () => {
   const location = useLocation();
@@ -28,8 +30,19 @@ const Sidebar = () => {
     });
     
   };
-  // Demo - পরে context থেকে আসবে
-  const userRole = "citizen"; // 'citizen' | 'staff' | 'admin'
+
+  const axiosSec = useAxiosSecure();
+  const {data, isLoading, isError} = useQuery({
+    queryKey: ["sidebar-role", user?.email],
+    queryFn: async ()=> {
+      const res = await axiosSec.get(`/api/get-user-data/${user.email}`);
+      return res.data;
+    },
+    enabled:!!user.email,
+  });
+  const userData = data || [];
+  console.log(userData.role);
+    
 
   // Role-based menu configuration
   const getMenuItems = (role) => {
@@ -75,7 +88,7 @@ const Sidebar = () => {
     return [...commonItems, ...(roleSpecificItems[role] || [])];
   };
 
-  const menuItems = getMenuItems(userRole);
+  const menuItems = getMenuItems(userData.role);
 
   return (
     <aside className="min-h-full w-64 bg-base-100 flex flex-col">

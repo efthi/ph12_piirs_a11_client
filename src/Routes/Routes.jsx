@@ -61,7 +61,7 @@ export const router = createBrowserRouter([
       { path: "profile", element: <PrivateRoutes> <Profile></Profile> </PrivateRoutes> },
       { path: "report-issue", element: <ReportIssue></ReportIssue> },
       
-      {path:"edit-issue/:id", element: <h1 className="text-center text-2xl font-bold mb-6">Edit Issue from routes</h1> ,},
+      //{path:"edit-issue/:id", element: <h1 className="text-center text-2xl font-bold mb-6">Edit Issue from routes</h1> ,},
       {path:"payment-success/", element: <PaymentOk></PaymentOk>,},
       {path:"payment-cancel", element: <PaymentFail></PaymentFail> ,},
       {path:"view-issue/:id", element: <IssueDetails></IssueDetails> ,},

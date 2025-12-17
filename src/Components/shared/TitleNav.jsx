@@ -1,5 +1,6 @@
 import React from "react";
-import logo from "../../assets/logo/logo_piirs_30070.png";
+import logo from "../../assets/logo/port-city-piirs-logo_neon.png";
+
 const TitleNav = () => {
   return (
     <>

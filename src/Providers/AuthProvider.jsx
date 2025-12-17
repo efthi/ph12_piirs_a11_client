@@ -27,8 +27,10 @@ const AuthProvider = ({ children }) => {
   //User SignIn
   const signinUser = (email, password) => {
     setAuthload(true);
-    return signInWithEmailAndPassword(auth, email, password);
-  };
+    return signInWithEmailAndPassword(auth, email, password).finally(()=>{
+      setAuthload(false);
+    });
+  }
 
   //User Logout
   const logOut = () => {

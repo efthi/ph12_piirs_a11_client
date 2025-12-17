@@ -15,7 +15,7 @@ const Login = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const { signinUser } = useAuth();
+  const { signinUser, user, authload } = useAuth();
   //অন্য যে পেইজ থেকে আসবে সেটার location link ধরার জন্য
   const location = useLocation();
   //নির্ধারিত পেইজে navigate করার জন্য

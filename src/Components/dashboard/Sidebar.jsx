@@ -41,7 +41,7 @@ const Sidebar = () => {
     enabled:!!user.email,
   });
   const userData = data || [];
-  console.log(userData.role);
+//  console.log(userData.role);
     
 
   // Role-based menu configuration

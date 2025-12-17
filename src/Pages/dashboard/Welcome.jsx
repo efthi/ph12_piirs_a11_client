@@ -25,7 +25,7 @@ const Welcome = () => {
     } = useQuery({
       queryKey: ["issues-by-user-welcome", user?.email],
       queryFn: async () => {
-        const res = await axiosSec.get(`/api/issues-by-user/${user.email}`);
+        const res = await axiosSec.get(`/api/issues-by-user`);
         return res.data;
       },
       enabled: !!user?.email,
@@ -33,11 +33,15 @@ const Welcome = () => {
 
 const userData = data || [];
  console.log(userData.role);
+console.log(userIssue);
+ 
+ 
  
   const userStat = {
     total: userIssue.length,
     pending: userIssue.filter(i => i.status === 'Pending').length,
     inProgress: userIssue.filter(i => i.status === 'In-Progress').length,
+    assigned: userIssue.filter(i => i.status === 'Assigned').length,
     resolved: userIssue.filter(i => i.status === 'Resolved').length,
   };
 
@@ -53,17 +57,17 @@ const userData = data || [];
         ];
       case 'staff':
         return [
-          { icon: FileText, label: 'Assigned Issues', value: '25', color: 'text-primary' },
-          { icon: Clock, label: 'In Progress', value: '8', color: 'text-warning' },
-          { icon: CheckCircle, label: 'Resolved', value: '15', color: 'text-success' },
-          { icon: UserCheck, label: 'Today\'s Task', value: '5', color: 'text-info' },
+          { icon: FileText, label: 'Total Issues', value: `${userStat.assigned}`, color: 'text-primary' },
+          { icon: Clock, label: 'Pending', value: `${userStat.pending}`, color: 'text-warning' },
+          { icon: CheckCircle, label: 'Resolved', value: `${userStat.resolved}`, color: 'text-success' },
+          { icon: DollarSign, label: 'Payments', value: '৳500', color: 'text-secondary' },
         ];
       case 'admin':
         return [
-          { icon: FileText, label: 'Total Issues', value: '247', color: 'text-primary' },
-          { icon: CheckCircle, label: 'Resolved', value: '189', color: 'text-success' },
-          { icon: Users, label: 'Total Users', value: '1,420', color: 'text-info' },
-          { icon: DollarSign, label: 'Revenue', value: '৳45,200', color: 'text-secondary' },
+           { icon: FileText, label: 'Total Issues', value: `${userIssue.length}`, color: 'text-primary' },
+          { icon: Clock, label: 'Pending', value: `${userStat.pending}`, color: 'text-warning' },
+          { icon: CheckCircle, label: 'Resolved', value: `${userStat.resolved}`, color: 'text-success' },
+          { icon: DollarSign, label: 'Payments', value: '৳500', color: 'text-secondary' },
         ];
       default:
         return [];

@@ -1,19 +1,16 @@
 import { Menu, Bell, Search, LogOut } from 'lucide-react';
 import { Link, useNavigate } from 'react-router';
 import useAuth from '../../hooks/useAuth';
+import useAxiosSecure from '../../hooks/useAxiosSecure';
+import { useQuery } from '@tanstack/react-query';
+import { useEffect } from 'react';
 
 const DashboardNav = () => {
-  // Demo - পরে context থেকে আসবে
-  const user01 = {
-    name: "John Doe",
-    email: "john@example.com",
-    role: "citizen",
-    photo: "https://i.pravatar.cc/150?img=5"
-  };
-
+ 
+  const axiosSec = useAxiosSecure();
   const {user, logOut} = useAuth();
   const navigate = useNavigate();
-    
+  
   const handleLogOut = async () => {
     await logOut()
     .then(()=>{
@@ -23,6 +20,20 @@ const DashboardNav = () => {
     });
     
   };
+
+     //get userData from DB
+  const {data, isLoading, error} = useQuery({
+    queryKey: ['dashboard-role', user.email],
+    queryFn : async () => {
+      const res = await axiosSec.get(`/api/get-user-data/${user.email}`);
+      return res.data;
+    }
+  });
+
+  const userData = data || [];
+  console.log(userData.role);
+  
+ 
   
   return (
     <div className="navbar bg-base-100 shadow-lg sticky top-0 z-50">
@@ -51,7 +62,7 @@ const DashboardNav = () => {
             <li className="menu-title">
               <span className="text-base font-bold">{user.displayName}</span>
               <span className="text-xs opacity-60">{user.email}</span>
-              <span className="badge badge-primary badge-sm mt-1 capitalize">{user.role}</span>
+              <span className="badge badge-primary badge-sm mt-1 capitalize">{userData.role}</span>
             </li>
             <div className="divider my-1"></div>
             <li><Link to="/dashboard/profile">Profile</Link></li>

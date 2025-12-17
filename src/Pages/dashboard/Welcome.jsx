@@ -31,7 +31,7 @@ const Welcome = () => {
       enabled: !!user?.email,
     });
 
-const userData = data;
+const userData = data || [];
  console.log(userData.role);
  
   const userStat = {
@@ -126,13 +126,13 @@ const userData = data;
                 {!userData.isPremium ? (<button className="btn btn-outline">Subscribe to Premium</button>) : ""}
               </>
             )}
-            {user.role === 'staff' && (
+            {userData.role === 'staff' && (
               <>
                 <button className="btn btn-primary">View Assigned Issues</button>
                 <button className="btn btn-outline">Update Status</button>
               </>
             )}
-            {user.role === 'admin' && (
+            {userData.role === 'admin' && (
               <>
                 <button className="btn btn-primary">View All Issues</button>
                 <button className="btn btn-outline">Manage Users</button>

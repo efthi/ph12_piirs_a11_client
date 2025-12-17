@@ -167,14 +167,14 @@ const handleSubscribe = async () => {
                 <div className="w-32 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
                   <img src={user?.photoURL} alt={user?.displayName} />
                 </div>
-                {userData?.isPremium ? (<></>) : (
+                {userData?.isPremium ? (
                   <div className="absolute -bottom-2 left-1/2 -translate-x-1/2">
                     <span className="badge badge-secondary gap-1">
                       <Crown size={14} />
                       Premium
                     </span>
                   </div>
-                )}
+                ) : (<></>)}
               </div>
 
               {/* Name */}

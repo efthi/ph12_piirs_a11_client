@@ -64,7 +64,7 @@ export const router = createBrowserRouter([
       { path: "report-issue", element: <ReportIssue></ReportIssue> },
       
       //admin
-      {path: "create-staff", element:<CreateStaff></CreateStaff>},
+      {path: "add-staff", element:<CreateStaff></CreateStaff>},
       {path: "all-issues", element:<ListIssues></ListIssues> },
       //{path:"edit-issue/:id", element: <h1 className="text-center text-2xl font-bold mb-6">Edit Issue from routes</h1> ,},
       {path: "payment-success/", element: <PaymentOk></PaymentOk>,},

@@ -77,7 +77,7 @@ const Sidebar = () => {
         {
           icon: PlusCircle,
           label: "Create Staff",
-          path: "/dashboard/create-staff",
+          path: "/dashboard/add-staff",
         },
         {
           icon: UserCog,

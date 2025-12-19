@@ -57,8 +57,8 @@ const Profile = () => {
       });
 
       // Update MongoDB
-      const response = await axios.patch(
-        `http://localhost:3000/api/update-user/`,
+      const response = await axiosSec.patch(
+        '/api/update-user/',
         {
           uid: user.uid,
           name: data.name,
@@ -118,7 +118,7 @@ const handleSubscribe = async () => {
       // priceId: 'price_...' // চাইলে client থেকে পাঠান
     };
 
-    const res = await axios.post('http://localhost:3000/create-checkout-sessions', paymentInfo);
+    const res = await axiosSec.post('/create-checkout-sessions', paymentInfo);
     console.log(res.data);
     
     if (res.data && res.data.url) {

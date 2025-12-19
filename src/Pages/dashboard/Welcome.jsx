@@ -41,7 +41,7 @@ console.log(userIssue);
     total: userIssue.length,
     pending: userIssue.filter(i => i.status === 'Pending').length,
     inProgress: userIssue.filter(i => i.status === 'In-Progress').length,
-    assigned: userIssue.filter(i => i.status === 'Assigned').length,
+    assigned: userIssue.filter(i => i.status === 'Assigned to Staff').length,
     resolved: userIssue.filter(i => i.status === 'Resolved').length,
   };
 
@@ -53,14 +53,14 @@ console.log(userIssue);
           { icon: FileText, label: 'Total Issues', value: `${userIssue.length}`, color: 'text-primary' },
           { icon: Clock, label: 'Pending', value: `${userStat.pending}`, color: 'text-warning' },
           { icon: CheckCircle, label: 'Resolved', value: `${userStat.resolved}`, color: 'text-success' },
-          { icon: DollarSign, label: 'Payments', value: '৳500', color: 'text-secondary' },
+          
         ];
       case 'staff':
         return [
           { icon: FileText, label: 'Total Issues', value: `${userStat.assigned}`, color: 'text-primary' },
           { icon: Clock, label: 'Pending', value: `${userStat.pending}`, color: 'text-warning' },
           { icon: CheckCircle, label: 'Resolved', value: `${userStat.resolved}`, color: 'text-success' },
-          { icon: DollarSign, label: 'Payments', value: '৳500', color: 'text-secondary' },
+         
         ];
       case 'admin':
         return [

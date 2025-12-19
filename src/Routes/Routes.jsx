@@ -19,6 +19,7 @@ import CreateStaff from "../Pages/dashboard/Admin/CreateStaff";
 import ListIssues from "../Pages/dashboard/Admin/ListIssues";
 import StaffList from "../Pages/dashboard/Admin/StaffList";
 import UserList from "../Pages/dashboard/Admin/UserList";
+import AssignedIssue from "../Pages/dashboard/Staff/AssignedIssue";
 
 export const router = createBrowserRouter([
   {
@@ -69,6 +70,9 @@ export const router = createBrowserRouter([
       {path: "add-staff", element:<CreateStaff></CreateStaff>},
       {path: "manage-staff", element:<StaffList></StaffList>},
       {path: "manage-users", element: <UserList></UserList>  },
+      
+      //Staff
+      {path: "assigned-issues", element: <AssignedIssue></AssignedIssue>  },
 
       {path: "all-issues", element:<ListIssues></ListIssues> },
       //{path:"edit-issue/:id", element: <h1 className="text-center text-2xl font-bold mb-6">Edit Issue from routes</h1> ,},

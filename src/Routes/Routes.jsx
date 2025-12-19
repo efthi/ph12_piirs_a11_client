@@ -17,6 +17,7 @@ import IssueDetails from "../Pages/IssueDetails";
 import MyIssues from "../Pages/dashboard/MyIssues";
 import CreateStaff from "../Pages/dashboard/Admin/CreateStaff";
 import ListIssues from "../Pages/dashboard/Admin/ListIssues";
+import StaffList from "../Pages/dashboard/Admin/StaffList";
 
 export const router = createBrowserRouter([
   {
@@ -65,6 +66,8 @@ export const router = createBrowserRouter([
       
       //admin
       {path: "add-staff", element:<CreateStaff></CreateStaff>},
+      {path: "manage-staff", element:<StaffList></StaffList>},
+
       {path: "all-issues", element:<ListIssues></ListIssues> },
       //{path:"edit-issue/:id", element: <h1 className="text-center text-2xl font-bold mb-6">Edit Issue from routes</h1> ,},
       {path: "payment-success/", element: <PaymentOk></PaymentOk>,},

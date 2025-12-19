@@ -74,12 +74,17 @@ const Sidebar = () => {
           label: "All Issues",
           path: "/dashboard/all-issues",
         },
-        { icon: Users, label: "Manage Users", path: "/dashboard/manage-users" },
+        {
+          icon: PlusCircle,
+          label: "Create Staff",
+          path: "/dashboard/create-staff",
+        },
         {
           icon: UserCog,
           label: "Manage Staff",
           path: "/dashboard/manage-staff",
         },
+        { icon: Users, label: "Manage Users", path: "/dashboard/manage-users" },
         { icon: CreditCard, label: "Payments", path: "/dashboard/payments" },
         { icon: User, label: "Profile", path: "/dashboard/profile" },
       ],

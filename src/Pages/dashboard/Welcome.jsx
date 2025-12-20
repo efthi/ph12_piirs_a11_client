@@ -1,73 +1,163 @@
-import { FileText, Clock, CheckCircle, DollarSign, Users, UserCheck } from 'lucide-react';
-import useAuth from '../../hooks/useAuth';
-import { useQuery } from '@tanstack/react-query';
-import useAxiosSecure from '../../hooks/useAxiosSecure';
-import { Link } from 'react-router';
+import {
+  FileText,
+  Clock,
+  Send,
+  Loader,
+  CheckCircle,
+  DollarSign,
+  Users,
+  UserCheck,
+} from "lucide-react";
+import useAuth from "../../hooks/useAuth";
+import { useQuery } from "@tanstack/react-query";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+import { Link } from "react-router";
 
 const Welcome = () => {
-  
-  const {user} = useAuth();
+  const { user } = useAuth();
   const axiosSec = useAxiosSecure();
 
-    //get userData from DB
-  const {data, isLoading, error} = useQuery({
-    queryKey: ['welcome-page', user.email],
-    queryFn : async () => {
+  //get userData from DB
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["welcome-page", user.email],
+    queryFn: async () => {
       const res = await axiosSec.get(`/api/get-user-data/${user.email}`);
       return res.data;
-    }
+    },
   });
 
-   const {
-      data: userIssue = [],
-      isLoading: issueloading,
-      error: issueError,
-    } = useQuery({
-      queryKey: ["issues-by-user-welcome", user?.email],
-      queryFn: async () => {
-        const res = await axiosSec.get(`/api/issues-by-user`);
-        return res.data;
-      },
-      enabled: !!user?.email,
-    });
+  const {
+    data: userIssue = [],
+    isLoading: issueloading,
+    error: issueError,
+  } = useQuery({
+    queryKey: ["issues-by-user-welcome", user?.email],
+    queryFn: async () => {
+      const res = await axiosSec.get(`/api/issues-by-user`);
+      return res.data;
+    },
+    enabled: !!user?.email,
+  });
 
-const userData = data || [];
- console.log(userData.role);
-console.log(userIssue);
- 
- 
- 
+  const userData = data || [];
+  console.log(userData.role);
+  console.log(userIssue);
+
   const userStat = {
     total: userIssue.length,
-    pending: userIssue.filter(i => i.status === 'Pending').length,
-    inProgress: userIssue.filter(i => i.status === 'In-Progress').length,
-    assigned: userIssue.filter(i => i.status === 'Assigned to Staff').length,
-    resolved: userIssue.filter(i => i.status === 'Resolved').length,
+    pending: userIssue.filter((i) => i.status === "Pending").length,
+    inProgress: userIssue.filter((i) => i.status === "In-Progress").length,
+    assigned: userIssue.filter((i) => i.status === "Assigned to Staff").length,
+    resolved: userIssue.filter((i) => i.status === "Resolved").length,
   };
 
   // Role-based stats
   const getStats = (role) => {
-    switch(role) {
-      case 'citizen':
+    switch (role) {
+      case "citizen":
         return [
-          { icon: FileText, label: 'Total Issues', value: `${userIssue.length}`, color: 'text-primary' },
-          { icon: Clock, label: 'Pending', value: `${userStat.pending}`, color: 'text-warning' },
-          { icon: CheckCircle, label: 'Resolved', value: `${userStat.resolved}`, color: 'text-success' },
-          
+          {
+            icon: FileText,
+            label: "Total Issues",
+            value: `${userIssue.length}`,
+            color: "text-primary",
+          },
+          {
+            icon: Clock,
+            label: "Pending",
+            value: `${userStat.pending}`,
+            color: "text-warning",
+          },
+          {
+            icon: Loader,
+            label: "In-Progress",
+            value: `${userStat.inProgress}`,
+            color: "text-secondary",
+          },
+          {
+            icon: Send,
+            label: "Assigned",
+            value: `${userStat.assigned}`,
+            color: "text-error",
+          },
+          {
+            icon: CheckCircle,
+            label: "Resolved",
+            value: `${userStat.resolved}`,
+            color: "text-success",
+          },
         ];
-      case 'staff':
+      case "staff":
         return [
-          { icon: FileText, label: 'Total Issues', value: `${userStat.assigned}`, color: 'text-primary' },
-          { icon: Clock, label: 'Pending', value: `${userStat.pending}`, color: 'text-warning' },
-          { icon: CheckCircle, label: 'Resolved', value: `${userStat.resolved}`, color: 'text-success' },
-         
+          {
+            icon: FileText,
+            label: "Total Issues",
+            value: `${userStat.assigned}`,
+            color: "text-primary",
+          },
+          {
+            icon: Clock,
+            label: "Pending",
+            value: `${userStat.pending}`,
+            color: "text-warning",
+          },
+          {
+            icon: Loader,
+            label: "In-Progress",
+            value: `${userStat.inProgress}`,
+            color: "text-secondary",
+          },
+          {
+            icon: Send,
+            label: "Assigned",
+            value: `${userStat.assigned}`,
+            color: "text-error",
+          },
+          {
+            icon: CheckCircle,
+            label: "Resolved",
+            value: `${userStat.resolved}`,
+            color: "text-success",
+          },
         ];
-      case 'admin':
+      case "admin":
         return [
-           { icon: FileText, label: 'Total Issues', value: `${userIssue.length}`, color: 'text-primary' },
-          { icon: Clock, label: 'Pending', value: `${userStat.pending}`, color: 'text-warning' },
-          { icon: CheckCircle, label: 'Resolved', value: `${userStat.resolved}`, color: 'text-success' },
-          { icon: DollarSign, label: 'Payments', value: '৳500', color: 'text-secondary' },
+          {
+            icon: FileText,
+            label: "Total Issues",
+            value: `${userIssue.length}`,
+            color: "text-primary",
+          },
+          {
+            icon: Clock,
+            label: "Pending",
+            value: `${userStat.pending}`,
+            color: "text-warning",
+          },
+          {
+            icon: Loader,
+            label: "In-Progress",
+            value: `${userStat.inProgress}`,
+            color: "text-secondary",
+          },
+          {
+            icon: Send,
+            label: "Assigned",
+            value: `${userStat.assigned}`,
+            color: "text-error",
+          },
+          {
+            icon: CheckCircle,
+            label: "Resolved",
+            value: `${userStat.resolved}`,
+            color: "text-success",
+          },
+          {
+            icon: DollarSign,
+            label: "Payments",
+            value: "৳500",
+            color: "text-secondary",
+          },
         ];
       default:
         return [];
@@ -78,12 +168,12 @@ console.log(userIssue);
 
   // Role-based welcome message
   const getWelcomeMessage = (role) => {
-    switch(role) {
-      case 'citizen':
+    switch (role) {
+      case "citizen":
         return "Track and manage your reported issues";
-      case 'staff':
+      case "staff":
         return "Manage assigned issues and update their status";
-      case 'admin':
+      case "admin":
         return "Monitor all activities and manage the system";
       default:
         return "Welcome to your dashboard";
@@ -123,20 +213,32 @@ console.log(userIssue);
         <div className="card-body">
           <h2 className="card-title mb-4">Quick Actions</h2>
           <div className="flex flex-wrap gap-2">
-            {userData.role === 'citizen' && (
+            {userData.role === "citizen" && (
               <>
-                <Link to="/dashboard/report-issue" className="btn btn-primary">Report New Issue</Link>
-                <Link to="/dashboard/my-issues" className="btn btn-outline">View My Issues</Link>
-                {!userData.isPremium ? (<button className="btn btn-outline">Subscribe to Premium</button>) : ""}
+                <Link to="/dashboard/report-issue" className="btn btn-primary">
+                  Report New Issue
+                </Link>
+                <Link to="/dashboard/my-issues" className="btn btn-outline">
+                  View My Issues
+                </Link>
+                {!userData.isPremium ? (
+                  <button className="btn btn-outline">
+                    Subscribe to Premium
+                  </button>
+                ) : (
+                  ""
+                )}
               </>
             )}
-            {userData.role === 'staff' && (
+            {userData.role === "staff" && (
               <>
-                <button className="btn btn-primary">View Assigned Issues</button>
+                <button className="btn btn-primary">
+                  View Assigned Issues
+                </button>
                 <button className="btn btn-outline">Update Status</button>
               </>
             )}
-            {userData.role === 'admin' && (
+            {userData.role === "admin" && (
               <>
                 <button className="btn btn-primary">View All Issues</button>
                 <button className="btn btn-outline">Manage Users</button>

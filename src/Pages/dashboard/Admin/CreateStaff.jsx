@@ -6,7 +6,6 @@ import Container from "../../../Components/shared/Container";
 import Footer from "../../../Components/shared/Footer";
 import TitleNav from "../../../Components/shared/TitleNav";
 import useAuth from "../../../hooks/useAuth";
-import { updateProfile } from "firebase/auth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
 

@@ -21,6 +21,7 @@ import StaffList from "../Pages/dashboard/Admin/StaffList";
 import UserList from "../Pages/dashboard/Admin/UserList";
 import AssignedIssue from "../Pages/dashboard/Staff/AssignedIssue";
 
+
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -67,7 +68,7 @@ export const router = createBrowserRouter([
       { path: "report-issue", element: <ReportIssue></ReportIssue> },
       
       //admin
-      {path: "add-staff", element:<CreateStaff></CreateStaff>},
+      {path: "add-staff", element: <CreateStaff></CreateStaff> },
       {path: "manage-staff", element:<StaffList></StaffList>},
       {path: "manage-users", element: <UserList></UserList>  },
       

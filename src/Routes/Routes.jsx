@@ -20,6 +20,7 @@ import ListIssues from "../Pages/dashboard/Admin/ListIssues";
 import StaffList from "../Pages/dashboard/Admin/StaffList";
 import UserList from "../Pages/dashboard/Admin/UserList";
 import AssignedIssue from "../Pages/dashboard/Staff/AssignedIssue";
+import BoostOk from "../Pages/Payment/BoostOk";
 
 
 export const router = createBrowserRouter([
@@ -77,9 +78,10 @@ export const router = createBrowserRouter([
 
       {path: "all-issues", element:<ListIssues></ListIssues> },
       //{path:"edit-issue/:id", element: <h1 className="text-center text-2xl font-bold mb-6">Edit Issue from routes</h1> ,},
-      {path: "payment-success/", element: <PaymentOk></PaymentOk>,},
-      {path: "payment-cancel", element: <PaymentFail></PaymentFail> ,},
-      {path: "view-issue/:id", element: <IssueDetails></IssueDetails> ,},
+      {path: "payment-success/", element: <PaymentOk></PaymentOk>},
+      {path: "payment-cancel", element: <PaymentFail></PaymentFail> },
+      {path: "view-issue/:id", element: <IssueDetails></IssueDetails>},
+      {path: "boost-success", element: <BoostOk></BoostOk>},
       
     ],
   },

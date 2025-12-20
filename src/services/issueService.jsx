@@ -20,3 +20,14 @@ export const toggleUpvote = async ({ issueId, userId }) => {
   const response = await axios.put(`${import.meta.env.VITE_API_URL}/api/issues/${issueId}/upvote`, { userId });
   return response.data;
 };
+
+//Boost service function
+export const createBoostSession = async ({ axiosSec, issueId }) => {
+  const res = await axiosSec.post("/api/boost/create-checkout-session", { issueId });
+  return res.data; // { url, id }
+};
+
+export const storeIssueBoostPayment = async ({ axiosSec, issueId, paymentSessionID }) => {
+  const res = await axiosSec.patch(`/api/issues/${issueId}/boost`, { paymentSessionID });
+  return res.data;
+};

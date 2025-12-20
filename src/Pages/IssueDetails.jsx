@@ -11,12 +11,11 @@ import {
   Trash2,
   Zap,
   ArrowLeft,
-  AlertCircle
+  AlertCircle,
 } from "lucide-react";
 import useAuth from "../hooks/useAuth";
-import { deleteIssue, toggleUpvote } from "../services/issueService";
+import { deleteIssue, toggleUpvote, createBoostSession } from "../services/issueService";
 import IssueTimeline from "../components/issues/IssueTimeline";
-
 import useAxiosSecure from "../hooks/useAxiosSecure";
 
 const IssueDetails = () => {
@@ -27,19 +26,15 @@ const IssueDetails = () => {
   const axiosSec = useAxiosSecure();
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
-
-// TanStack Query - replaces useEffect + useState
-  const { data, isLoading, error, } = useQuery({
-    queryKey: ['view-issue'], // Unique key for this query
-    queryFn: async () =>{
-        const response = await axiosSec.get(`/api/issue/${id}`);
-        console.log(response.data);
-        
+  // TanStack Query -
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["view-issue", id], // Unique key for this query
+    queryFn: async () => {
+      const response = await axiosSec.get(`/api/issue/${id}`);
       return response.data;
     },
+    enabled:!!id,
   });
-
- 
 
   const issue = data;
 
@@ -47,10 +42,10 @@ const IssueDetails = () => {
   const deleteMutation = useMutation({
     mutationFn: deleteIssue,
     onSuccess: () => {
-      queryClient.invalidateQueries(['allIssues']);
-      queryClient.invalidateQueries(['myIssues']);
+      queryClient.invalidateQueries(["allIssues"]);
+      queryClient.invalidateQueries(["myIssues"]);
       toast.success("Issue deleted successfully!");
-      navigate('/all-issues');
+      navigate("/all-issues");
     },
     onError: (error) => {
       toast.error(error.response?.data?.message || "Failed to delete issue");
@@ -61,10 +56,10 @@ const IssueDetails = () => {
   const upvoteMutation = useMutation({
     mutationFn: toggleUpvote,
     onSuccess: (response) => {
-      queryClient.invalidateQueries(['issue', id]);
-      queryClient.invalidateQueries(['allIssues']);
-      
-      if (response.action === 'added') {
+      queryClient.invalidateQueries(["issue", id]);
+      queryClient.invalidateQueries(["allIssues"]);
+
+      if (response.action === "added") {
         toast.success("Upvoted!");
       } else {
         toast.info("Upvote removed");
@@ -79,7 +74,7 @@ const IssueDetails = () => {
   const handleUpvote = () => {
     if (!user) {
       toast.error("Please login to upvote");
-      navigate('/login', { state: `/issue/${id}` });
+      navigate("/login", { state: `/issue/${id}` });
       return;
     }
 
@@ -97,20 +92,40 @@ const IssueDetails = () => {
     setShowDeleteConfirm(false);
   };
 
+  //handle boost
+  const boostMutation = useMutation({
+    mutationFn: ({ issueId }) => createBoostSession({ axiosSec, issueId }),
+    onSuccess: (data) => {
+      window.location.href = data.url; // Stripe checkout এ যাবে
+    },
+    onError: (error) => {
+      toast.error(
+        error.response?.data?.message ||
+          error.message ||
+          "Failed to start boost payment"
+      );
+    },
+  });
+
   // Check if user owns this issue
   const isOwner = user && issue?.reportedBy?.uid === user.uid;
-  const canEdit = isOwner && issue?.status === 'Pending';
+  const canEdit = isOwner && issue?.status === "Pending";
   const canDelete = isOwner;
   const hasUpvoted = issue?.upvotedBy?.includes(user?.uid);
 
   // Status badge color
   const getStatusColor = (status) => {
-    switch(status?.toLowerCase()) {
-      case 'resolved': return 'badge-success';
-      case 'in-progress': return 'badge-warning';
-      case 'pending': return 'badge-info';
-      case 'closed': return 'badge-neutral';
-      default: return 'badge-ghost';
+    switch (status?.toLowerCase()) {
+      case "resolved":
+        return "badge-success";
+      case "in-progress":
+        return "badge-warning";
+      case "pending":
+        return "badge-info";
+      case "closed":
+        return "badge-neutral";
+      default:
+        return "badge-ghost";
     }
   };
 
@@ -140,10 +155,7 @@ const IssueDetails = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       {/* Back Button */}
-      <button 
-        onClick={() => navigate(-1)} 
-        className="btn btn-ghost gap-2 mb-6"
-      >
+      <button onClick={() => navigate(-1)} className="btn btn-ghost gap-2 mb-6">
         <ArrowLeft size={20} />
         Back
       </button>
@@ -156,8 +168,8 @@ const IssueDetails = () => {
             {/* Image */}
             {issue.image && (
               <figure className="max-h-96 overflow-hidden">
-                <img 
-                  src={issue.image} 
+                <img
+                  src={issue.image}
                   alt={issue.title}
                   className="w-full h-full object-cover"
                 />
@@ -167,15 +179,17 @@ const IssueDetails = () => {
             <div className="card-body">
               {/* Badges */}
               <div className="flex gap-2 flex-wrap mb-4">
-                <span className={`badge ${issue.priority === 'High' ? 'badge-error' : 'badge-ghost'}`}>
-                  {issue.priority || 'Normal'} Priority
+                <span
+                  className={`badge ${
+                    issue.priority === "High" ? "badge-error" : "badge-ghost"
+                  }`}
+                >
+                  {issue.priority || "Normal"} Priority
                 </span>
                 <span className={`badge ${getStatusColor(issue.status)}`}>
                   {issue.status}
                 </span>
-                <span className="badge badge-outline">
-                  {issue.category}
-                </span>
+                <span className="badge badge-outline">{issue.category}</span>
                 {issue.isBoosted && (
                   <span className="badge badge-secondary gap-1">
                     <Zap size={14} />
@@ -239,17 +253,19 @@ const IssueDetails = () => {
                 {/* Upvote Button */}
                 <button
                   onClick={handleUpvote}
-                  className={`btn gap-2 ${hasUpvoted ? 'btn-primary' : 'btn-outline btn-primary'}`}
+                  className={`btn gap-2 ${
+                    hasUpvoted ? "btn-primary" : "btn-outline btn-primary"
+                  }`}
                   disabled={upvoteMutation.isPending}
                 >
                   <ThumbsUp size={18} />
-                  {hasUpvoted ? 'Upvoted' : 'Upvote'} ({issue.upvotes || 0})
+                  {hasUpvoted ? "Upvoted" : "Upvote"} ({issue.upvotes || 0})
                 </button>
 
                 {/* Edit Button */}
                 {canEdit && (
-                  <Link 
-                    to={`/dashboard/edit-issue/${id}`} 
+                  <Link
+                    to={`/dashboard/edit-issue/${id}`}
                     className="btn btn-outline gap-2"
                   >
                     <Edit size={18} />
@@ -269,10 +285,16 @@ const IssueDetails = () => {
                 )}
 
                 {/* Boost Button */}
-                {!issue.isBoosted && user && (
-                  <button className="btn btn-secondary gap-2">
+                {!issue.isBoosted && isOwner && (
+                  <button
+                    className="btn btn-secondary gap-2"
+                    onClick={() => boostMutation.mutate({ issueId: id })}
+                    disabled={boostMutation.isPending}
+                  >
                     <Zap size={18} />
-                    Boost Issue (৳100)
+                    {boostMutation.isPending
+                      ? "Redirecting..."
+                      : "Boost Issue (৳100)"}
                   </button>
                 )}
               </div>
@@ -354,21 +376,22 @@ const IssueDetails = () => {
           <div className="modal-box">
             <h3 className="font-bold text-lg">Confirm Delete</h3>
             <p className="py-4">
-              Are you sure you want to delete this issue? This action cannot be undone.
+              Are you sure you want to delete this issue? This action cannot be
+              undone.
             </p>
             <div className="modal-action">
-              <button 
-                className="btn btn-ghost" 
+              <button
+                className="btn btn-ghost"
                 onClick={() => setShowDeleteConfirm(false)}
               >
                 Cancel
               </button>
-              <button 
-                className="btn btn-error" 
+              <button
+                className="btn btn-error"
                 onClick={handleDelete}
                 disabled={deleteMutation.isPending}
               >
-                {deleteMutation.isPending ? 'Deleting...' : 'Delete'}
+                {deleteMutation.isPending ? "Deleting..." : "Delete"}
               </button>
             </div>
           </div>

@@ -16,7 +16,7 @@ const Banner = () => {
             Report infrastructure issues and track their resolution in real-time
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/report-issue" className="btn btn-lg btn-accent">
+            <Link to="/dashboard/report-issue" className="btn btn-lg btn-accent">
               <AlertCircle size={20} />
               Report an Issue
             </Link>
@@ -31,17 +31,17 @@ const Banner = () => {
             <div className="stat">
               <div className="stat-title">Total Issues</div>
               <div className="stat-value text-primary">1,247</div>
-              <div className="stat-desc">↗︎ 128 this month</div>
+              
             </div>
             <div className="stat">
               <div className="stat-title">Resolved</div>
               <div className="stat-value text-success">892</div>
-              <div className="stat-desc">↗︎ 71.5% success rate</div>
+              
             </div>
             <div className="stat">
               <div className="stat-title">Active Users</div>
               <div className="stat-value text-secondary">5,420</div>
-              <div className="stat-desc">↗︎ 210 new users</div>
+             
             </div>
           </div>
         </div>

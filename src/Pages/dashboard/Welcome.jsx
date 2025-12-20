@@ -232,17 +232,17 @@ const Welcome = () => {
             )}
             {userData.role === "staff" && (
               <>
-                <button className="btn btn-primary">
+                <Link to="/dashboard/assigned-issues" className="btn btn-primary">
                   View Assigned Issues
-                </button>
-                <button className="btn btn-outline">Update Status</button>
+                </Link>
+                <button className="btn btn-secondary btn-disabled">Update Status</button>
               </>
             )}
             {userData.role === "admin" && (
               <>
-                <button className="btn btn-primary">View All Issues</button>
-                <button className="btn btn-outline">Manage Users</button>
-                <button className="btn btn-outline">Add Staff</button>
+                <Link to="/dashboard/all-issues" className="btn btn-primary">View All Issues</Link>
+                <Link to="/dashboard/manage-users" className="btn btn-outline">Manage Users</Link>
+                <Link to="/dashboard/add-staff" className="btn btn-outline">Add Staff</Link>
               </>
             )}
           </div>

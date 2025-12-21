@@ -31,7 +31,6 @@ const DashboardNav = () => {
   });
 
   const userData = data || [];
-  console.log(userData.role);
   
  
   

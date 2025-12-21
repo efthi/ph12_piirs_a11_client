@@ -40,8 +40,6 @@ const Welcome = () => {
   });
 
   const userData = data || [];
-  console.log(userData.role);
-  console.log(userIssue);
 
   const userStat = {
     total: userIssue.length,

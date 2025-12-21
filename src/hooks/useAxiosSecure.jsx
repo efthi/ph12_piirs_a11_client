@@ -13,7 +13,7 @@ const useAxiosSecure = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log("axiosSecure auth:", { authload, user });
+    //console.log("axiosSecure auth:", { authload, user });
     if (!authload && user?.accessToken) {
       const requestInterceptor = axiosInstance.interceptors.request.use(
         (config) => {

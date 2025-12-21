@@ -1,32 +1,52 @@
-import React from "react";
 import useAuth from "../../../hooks/useAuth";
 import { toast } from "react-toastify";
 import { useLocation, useNavigate } from "react-router";
-
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const SocialLogin = () => {
-
   const location = useLocation();
-  const navigate =useNavigate();
-  const {signInGoogle} = useAuth();
-  
-  const handleGoogleSignIn = () =>{
-    signInGoogle()
-      .then(result=>{
-        console.log(result.user);
-        navigate(location?.state || '/dashboard')
-        toast.success('Login Success!')
-      })
-      .catch(error => {
-        console.log(error);
-        toast.error('Error with Google Login')
-      })
-  }
+  const navigate = useNavigate();
+  const { signInGoogle } = useAuth();
+  const axiosSec = useAxiosSecure();
+
+  const handleGoogleSignIn = async () => {
+    try {
+      const result = await signInGoogle();
+      const user = result.user;
+const token = await result.user.getIdToken();
+console.log("TOKEN:", token?.slice(0, 20));
+
+await axiosSec.post("/api/social-login",
+  { name: user.displayName, imgURL: user.photoURL },
+  { headers: { authorization: `Bearer ${token}` } } // ✅ forced
+);
+      // await axiosSec.post("/api/social-login", {
+      //   name: user.displayName,
+      //   imgURL: user.photoURL,
+      // });
+
+      toast.success("Login Success!");
+      navigate(location?.state || "/dashboard");
+    } catch (error) {
+      console.log("GOOGLE LOGIN ERROR:", error);
+      console.log("STATUS:", error?.response?.status);
+      console.log("DATA:", error?.response?.data);
+      console.log("MESSAGE:", error?.message);
+      toast.error(
+        error?.response?.data?.message ||
+          error?.message ||
+          "Error with Google Login"
+      );
+    }
+  };
 
   return (
     <>
       {/* Google */}
-      <button onClick={handleGoogleSignIn} className="btn bg-white text-black border-[#e5e5e5]">
+      <button
+        onClick={handleGoogleSignIn}
+        className="btn bg-white text-black border-[#e5e5e5]"
+      >
         <svg
           aria-label="Google logo"
           width="16"

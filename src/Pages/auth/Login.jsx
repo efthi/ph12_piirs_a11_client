@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import Footer from "../../Components/shared/Footer";
@@ -8,6 +8,7 @@ import Container from "../../Components/shared/Container";
 import SocialLogin from "./SocialLogin/SocialLogin";
 import loginimage from "../../assets/images/login.png";
 import useAuth from "../../hooks/useAuth";
+import { Eye, EyeOff } from "lucide-react";
 
 const Login = () => {
   const {
@@ -20,6 +21,17 @@ const Login = () => {
   const location = useLocation();
   //নির্ধারিত পেইজে navigate করার জন্য
   const navigate = useNavigate();
+
+  //
+const [showpass, setShwopass] = useState(false);
+
+//show/hide password toggle এর ফাংশন এখানে
+const showHidePass = (e) => {
+    e.preventDefault();
+   // console.log(showpass);
+    setShwopass(!showpass);
+};
+
 
   const handleLogin = async (data) => {
     try {
@@ -79,8 +91,9 @@ const Login = () => {
                       <label className="label">
                         <span className="label-text">Password</span>
                       </label>
-                      <input
-                        type="password"
+                        <label className="input">
+<input
+                        type={ showpass ? 'text' : 'password'}
                         placeholder="********"
                         className="input input-bordered w-full"
                         name="password"
@@ -89,6 +102,11 @@ const Login = () => {
                           minLength: 6,
                         })}
                       />
+                      <button onClick={showHidePass}  className="btn btn-xs bg-transparent">
+                                {showpass ? (<Eye color="#ff0000" />) : (<EyeOff color="#ff0000" />)}
+                            </button>
+                        </label>
+                      
                       {errors.password?.type === "required" && (
                         <div role="alert" className="alert alert-warning">
                           ⚠️<span>This field cannot empty!</span>
@@ -100,7 +118,11 @@ const Login = () => {
                         </div>
                       )}
                     </div>
-
+                       <div className="mt-2 text-right">
+                        <Link to='/forgetpassword'  className="btn btn-link btn-xs text-sm">
+                        Forgot password?
+                        </Link>
+                    </div>
                     <div className="form-control mt-6">
                       <button className="btn btn-success w-full">Login</button>
                     </div>

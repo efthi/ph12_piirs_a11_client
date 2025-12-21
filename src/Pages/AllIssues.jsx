@@ -170,9 +170,15 @@ const AllIssues = () => {
           </div>
         </div>
         <div className="stat">
-          <div className="stat-title">Pending</div>
+          <div className="stat-title">In Progress</div>
           <div className="stat-value text-info">
-            {filteredIssues.filter((i) => i.status === "Pending").length}
+            {filteredIssues.filter((i) => i.status === "In-progress").length}
+          </div>
+        </div>
+        <div className="stat">
+          <div className="stat-title">Assign</div>
+          <div className="stat-value text-success">
+            {filteredIssues.filter((i) => i.status === "Assigned to Staff").length}
           </div>
         </div>
         <div className="stat">

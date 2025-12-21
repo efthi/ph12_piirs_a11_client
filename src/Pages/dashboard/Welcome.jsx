@@ -44,7 +44,7 @@ const Welcome = () => {
   const userStat = {
     total: userIssue.length,
     pending: userIssue.filter((i) => i.status === "Pending").length,
-    inProgress: userIssue.filter((i) => i.status === "In-Progress").length,
+    inProgress: userIssue.filter((i) => i.status === "In-progress").length,
     assigned: userIssue.filter((i) => i.status === "Assigned to Staff").length,
     resolved: userIssue.filter((i) => i.status === "Resolved").length,
   };

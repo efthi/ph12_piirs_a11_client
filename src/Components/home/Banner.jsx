@@ -1,13 +1,33 @@
 import { Link } from 'react-router';
 import { AlertCircle, Search } from 'lucide-react';
+import useAxiosPub from '../../hooks/useAxiosPub';
+import { useQuery } from '@tanstack/react-query';
 
 const Banner = () => {
+  
+  const axiosPub = useAxiosPub();
+  const {data=[], isLoading, isError} = useQuery({
+    queryKey:["banner-issue"],
+    queryFn: async ()=> {
+      const res = await axiosPub.get('/api/all-issue');
+      return res.data;
+    }
+  });
+
+  console.log(data);
+   const issueStat = {
+    total: data.length,
+    pending: data.filter((i) => i.status === "Pending").length,
+    inProgress: data.filter((i) => i.status === "In-progress").length,
+    assigned: data.filter((i) => i.status === "Assigned to Staff").length,
+    resolved: data.filter((i) => i.status === "Resolved").length,
+  };
   return (
     <div className="hero min-h-[600px] bg-gradient-to-r from-primary to-secondary">
       <div className="hero-content text-center text-neutral-content">
         <div className="max-w-4xl">
           <div className="flex justify-center mb-6">
-            <AlertCircle size={80} className="text-white" />
+            {/* <AlertCircle size={80} className="text-white" /> */}
           </div>
           <h1 className="text-5xl md:text-7xl font-bold mb-6">
             Building a Better Chattogram Together
@@ -30,18 +50,23 @@ const Banner = () => {
           <div className="stats stats-vertical lg:stats-horizontal shadow-xl mt-12 bg-base-100 text-base-content">
             <div className="stat">
               <div className="stat-title">Total Issues</div>
-              <div className="stat-value text-primary">1,247</div>
+              <div className="stat-value text-primary">{issueStat.total}</div>
               
+            </div>
+            <div className="stat">
+              <div className="stat-title">Assigned</div>
+              <div className="stat-value text-success">{issueStat.assigned}</div>
+              
+            </div>
+            <div className="stat">
+              <div className="stat-title">In-Progress</div>
+              <div className="stat-value text-secondary">{issueStat.inProgress}</div>
+             
             </div>
             <div className="stat">
               <div className="stat-title">Resolved</div>
-              <div className="stat-value text-success">892</div>
+              <div className="stat-value text-success">{issueStat.resolved}</div>
               
-            </div>
-            <div className="stat">
-              <div className="stat-title">Active Users</div>
-              <div className="stat-value text-secondary">5,420</div>
-             
             </div>
           </div>
         </div>

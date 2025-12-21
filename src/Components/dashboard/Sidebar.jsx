@@ -85,7 +85,7 @@ const Sidebar = () => {
           path: "/dashboard/manage-staff",
         },
         { icon: Users, label: "Manage Users", path: "/dashboard/manage-users" },
-        { icon: CreditCard, label: "Payments", path: "/dashboard/payments" },
+        { icon: CreditCard, label: "Payments", path: "/dashboard/payment-history" },
         { icon: User, label: "Profile", path: "/dashboard/profile" },
       ],
     };

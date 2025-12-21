@@ -21,6 +21,7 @@ import StaffList from "../Pages/dashboard/Admin/StaffList";
 import UserList from "../Pages/dashboard/Admin/UserList";
 import AssignedIssue from "../Pages/dashboard/Staff/AssignedIssue";
 import BoostOk from "../Pages/Payment/BoostOk";
+import PaymentHistory from "../Pages/dashboard/Admin/PaymentHistory";
 
 
 export const router = createBrowserRouter([
@@ -72,6 +73,7 @@ export const router = createBrowserRouter([
       {path: "add-staff", element: <CreateStaff></CreateStaff> },
       {path: "manage-staff", element:<StaffList></StaffList>},
       {path: "manage-users", element: <UserList></UserList>  },
+      {path: "payment-history", element: <PaymentHistory></PaymentHistory>  },
       
       //Staff
       {path: "assigned-issues", element: <AssignedIssue></AssignedIssue>  },

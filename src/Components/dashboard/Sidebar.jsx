@@ -16,6 +16,7 @@ import useAuth from "../../hooks/useAuth";
 import testimage from "../../assets/logo/port-city-piirs-logo_neon.png";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import ThemeChange from "../shared/ThemeChange";
 
 const Sidebar = () => {
   const location = useLocation();
@@ -132,6 +133,9 @@ const Sidebar = () => {
 
         <div className="divider">Other</div>
 
+        <li>
+          <ThemeChange></ThemeChange>
+        </li>
         <li>
           <Link to="/">
             <Home size={20} />

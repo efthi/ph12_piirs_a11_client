@@ -3,6 +3,7 @@ import { Link , NavLink, useNavigate } from 'react-router';
 import { Menu, X } from 'lucide-react';
 import useAuth from '../../hooks/useAuth';
 import logo from '../../assets/logo/port-city-piirs-logo_neon.png';
+import ThemeChange from './ThemeChange';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -72,11 +73,13 @@ const Navbar = () => {
           <li><NavLink to="/dashboard/my-issues" className={({isActive})=> isActive ? "btn btn-outline btn-secondary" : ""} >My Issues</NavLink></li>
           <li><NavLink to="/about" className={({isActive})=> isActive ? "btn btn-outline btn-secondary" : ""}>About</NavLink></li>
           <li><NavLink to="/contact" className={({isActive})=> isActive ? "btn btn-outline btn-secondary" : ""}>Contact</NavLink></li>
+          <li> <ThemeChange></ThemeChange> </li>
         </ul>
       </div>
       
       {/* Profile/Login */}
       <div className="navbar-end">
+       
         {user ? (
           <div className="dropdown dropdown-end">
             <button 

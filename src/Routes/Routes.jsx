@@ -22,6 +22,7 @@ import UserList from "../Pages/dashboard/Admin/UserList";
 import AssignedIssue from "../Pages/dashboard/Staff/AssignedIssue";
 import BoostOk from "../Pages/Payment/BoostOk";
 import PaymentHistory from "../Pages/dashboard/Admin/PaymentHistory";
+import PasswordReset from "../Pages/auth/PasswordReset";
 
 
 export const router = createBrowserRouter([
@@ -49,6 +50,14 @@ export const router = createBrowserRouter([
     element: (
       <GuestRoutes>
         <Login></Login>
+      </GuestRoutes>
+    ),
+  },
+  {
+    path: "forget-password",
+    element: (
+      <GuestRoutes>
+        <PasswordReset></PasswordReset>
       </GuestRoutes>
     ),
   },

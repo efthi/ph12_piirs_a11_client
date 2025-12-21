@@ -119,7 +119,7 @@ const showHidePass = (e) => {
                       )}
                     </div>
                        <div className="mt-2 text-right">
-                        <Link to='/forgetpassword'  className="btn btn-link btn-xs text-sm">
+                        <Link to='/forget-password'  className="btn btn-link btn-xs text-sm">
                         Forgot password?
                         </Link>
                     </div>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Search, X } from "lucide-react";
 import IssueCard from "../components/issues/IssueCard";
@@ -6,15 +6,19 @@ import useAxiosPub from "../hooks/useAxiosPub";
 
 const AllIssues = () => {
   const axiosPub = useAxiosPub();
-  
+
   // Search state
   const [searchTerm, setSearchTerm] = useState("");
 
+  // Pagination state
+  const [page, setPage] = useState(1);
+  const pageSize = 9;
+
   // TanStack Query - fetch all issues
   const { data, isLoading, error } = useQuery({
-    queryKey: ['allIssues'],
+    queryKey: ["allIssues"],
     queryFn: async () => {
-      const response = await axiosPub.get('/api/all-issue');
+      const response = await axiosPub.get("/api/all-issue");
       return response.data;
     },
   });
@@ -22,16 +26,57 @@ const AllIssues = () => {
   const issues = data || [];
 
   // Filter issues based on search
-  const filteredIssues = issues.filter((issue) => {
-    const searchLower = searchTerm.toLowerCase();
-    
-    return (
-      issue.title?.toLowerCase().includes(searchLower) ||
-      issue.location?.toLowerCase().includes(searchLower) ||
-      issue.category?.toLowerCase().includes(searchLower) ||
-      issue.description?.toLowerCase().includes(searchLower)
-    );
-  });
+  const filteredIssues = useMemo(() => {
+    const searchLower = searchTerm.toLowerCase().trim();
+
+    if (!searchLower) return issues;
+
+    return issues.filter((issue) => {
+      return (
+        issue.title?.toLowerCase().includes(searchLower) ||
+        issue.location?.toLowerCase().includes(searchLower) ||
+        issue.category?.toLowerCase().includes(searchLower) ||
+        issue.description?.toLowerCase().includes(searchLower)
+      );
+    });
+  }, [issues, searchTerm]);
+
+  // Sort: boosted -> priority(high>normal>low) -> newest
+  const sorted = useMemo(() => {
+    const priorityRank = (p) => (p === "high" ? 2 : p === "normal" ? 1 : 0);
+
+    return [...filteredIssues].sort((a, b) => {
+      // boosted first
+      if (!!b.isBoosted !== !!a.isBoosted) {
+        return (b.isBoosted ? 1 : 0) - (a.isBoosted ? 1 : 0);
+      }
+
+      // then priority
+      const pr = priorityRank(b.priority) - priorityRank(a.priority);
+      if (pr !== 0) return pr;
+
+      // then newest
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+    });
+  }, [filteredIssues]);
+
+  // Reset page when searchTerm changes
+  useEffect(() => {
+    setPage(1);
+  }, [searchTerm]);
+
+  // Pagination calculations
+  const totalItems = sorted.length;
+  const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
+  const startIndex = (page - 1) * pageSize;
+  const endIndex = startIndex + pageSize;
+
+  // If page goes out of range (e.g., after search), clamp it
+  useEffect(() => {
+    if (page > totalPages) setPage(totalPages);
+  }, [page, totalPages]);
+
+  const paginatedIssues = sorted.slice(startIndex, endIndex);
 
   // Loading state
   if (isLoading) {
@@ -52,6 +97,10 @@ const AllIssues = () => {
       </div>
     );
   }
+
+  // showing info
+  const showingFrom = totalItems === 0 ? 0 : startIndex + 1;
+  const showingTo = Math.min(endIndex, totalItems);
 
   return (
     <div className="container mx-auto px-4 py-6">
@@ -80,30 +129,34 @@ const AllIssues = () => {
                   onClick={() => setSearchTerm("")}
                   className="btn btn-square"
                   title="Clear search"
+                  type="button"
                 >
                   <X size={20} />
                 </button>
               )}
-              <button className="btn btn-square btn-primary">
+              <button className="btn btn-square btn-primary" type="button">
                 <Search size={20} />
               </button>
             </div>
           </div>
 
           {/* Search results info */}
-          {searchTerm && (
-            <div className="mt-3">
-              <span className="text-sm opacity-70">
-                Showing {filteredIssues.length} of {issues.length} issues
-              </span>
-              {searchTerm && (
-                <div className="badge badge-primary gap-2 ml-2">
-                  Search: {searchTerm}
-                  <button onClick={() => setSearchTerm("")}>✕</button>
-                </div>
-              )}
-            </div>
-          )}
+          <div className="mt-3 flex flex-wrap items-center gap-2">
+            <span className="text-sm opacity-70">
+              Showing {showingFrom}-{showingTo} of {filteredIssues.length}{" "}
+              issues
+              {searchTerm ? ` (from ${issues.length} total)` : ""}
+            </span>
+
+            {searchTerm && (
+              <div className="badge badge-primary gap-2">
+                Search: {searchTerm}
+                <button onClick={() => setSearchTerm("")} type="button">
+                  ✕
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
@@ -119,13 +172,13 @@ const AllIssues = () => {
         <div className="stat">
           <div className="stat-title">Pending</div>
           <div className="stat-value text-info">
-            {filteredIssues.filter(i => i.status === 'Pending').length}
+            {filteredIssues.filter((i) => i.status === "Pending").length}
           </div>
         </div>
         <div className="stat">
           <div className="stat-title">Resolved</div>
           <div className="stat-value text-success">
-            {filteredIssues.filter(i => i.status === 'Resolved').length}
+            {filteredIssues.filter((i) => i.status === "Resolved").length}
           </div>
         </div>
       </div>
@@ -136,26 +189,59 @@ const AllIssues = () => {
           <div className="text-6xl mb-4">🔍</div>
           <h3 className="text-2xl font-bold mb-2">No Issues Found</h3>
           <p className="text-base-content/70 mb-6">
-            {searchTerm 
+            {searchTerm
               ? `No results for "${searchTerm}". Try different keywords.`
-              : "No issues have been reported yet."
-            }
+              : "No issues have been reported yet."}
           </p>
           {searchTerm && (
             <button
               onClick={() => setSearchTerm("")}
               className="btn btn-primary"
+              type="button"
             >
               Clear Search
             </button>
           )}
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {filteredIssues.map((issue) => (
-            <IssueCard key={issue._id} issue={issue} />
-          ))}
-        </div>
+        <>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            {paginatedIssues.map((issue) => (
+              <IssueCard key={issue._id} issue={issue} />
+            ))}
+          </div>
+
+          {/* Pagination Controls */}
+          <div className="flex justify-center mt-8">
+            <div className="join">
+              <button
+                className="btn join-item"
+                onClick={() => setPage((p) => Math.max(1, p - 1))}
+                disabled={page === 1}
+                type="button"
+              >
+                Prev
+              </button>
+
+              <button
+                className="btn join-item btn-ghost"
+                disabled
+                type="button"
+              >
+                Page {page} / {totalPages}
+              </button>
+
+              <button
+                className="btn join-item"
+                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                disabled={page === totalPages}
+                type="button"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        </>
       )}
     </div>
   );

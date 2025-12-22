@@ -10,6 +10,7 @@ import TitleNav from "../../Components/shared/TitleNav";
 import useAuth from "../../hooks/useAuth";
 import axios from "axios";
 import { updateProfile } from "firebase/auth";
+import useAxiosPub from "../../hooks/useAxiosPub";
 
 const Register = () => {
   //page title
@@ -24,6 +25,7 @@ const Register = () => {
   //import useAuth hook
   const { createUser, logOut } = useAuth();
 
+  const axiosPub = useAxiosPub();
   //user redirection
   const sendTo = useNavigate();
   //user register function
@@ -38,9 +40,7 @@ const Register = () => {
       if (data.profilepic?.length > 0) {
         const getformData = new FormData();
         getformData.append("image", profileImg);
-        const imageAPIURL = `https://api.imgbb.com/1/upload?key=${
-          import.meta.env.VITE_IMGBB_KEY
-        }`;
+        const imageAPIURL = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_KEY}`;
         const res = await axios.post(imageAPIURL, getformData);
         const {
           data: { data: imgData },
@@ -58,7 +58,7 @@ const Register = () => {
         });
       }
       //API তে ডেটা পাঠাচ্ছি
-      await axios.post(`${import.meta.env.VITE_API_URL}/storeuserdata`, {
+      await axiosPub.post("/storeuserdata", {
         uid: newUser.uid,
         name: newUser.displayName,
         email: newUser.email,

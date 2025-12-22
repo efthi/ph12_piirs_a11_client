@@ -178,6 +178,33 @@ const Welcome = () => {
     }
   };
 
+  const handleSubscribe = async () => {
+    try {
+      const paymentInfo = {
+        uid: user.uid,
+        name: user?.displayName,
+        amount: 100,
+        quantity: 1,
+        // priceId: 'price_...' // চাইলে client থেকে পাঠান
+      };
+
+      const res = await axiosSec.post("/create-checkout-sessions", paymentInfo);
+      console.log(res.data);
+
+      if (res.data && res.data.url) {
+        window.location.href = res.data.url; // redirect to Stripe hosted checkout
+      } else {
+        console.error("Unexpected server response:", res.data);
+        // show user friendly message
+      }
+    } catch (err) {
+      console.error(
+        "Payment error:",
+        err.response ? err.response.data : err.message
+      );
+    }
+  };
+
   return (
     <div>
       {/* Welcome Header */}
@@ -220,7 +247,7 @@ const Welcome = () => {
                   View My Issues
                 </Link>
                 {!userData.isPremium ? (
-                  <button className="btn btn-outline">
+                  <button onClick={handleSubscribe} className="btn btn-outline">
                     Subscribe to Premium
                   </button>
                 ) : (
@@ -230,17 +257,28 @@ const Welcome = () => {
             )}
             {userData.role === "staff" && (
               <>
-                <Link to="/dashboard/assigned-issues" className="btn btn-primary">
+                <Link
+                  to="/dashboard/assigned-issues"
+                  className="btn btn-primary"
+                >
                   View Assigned Issues
                 </Link>
-                <button className="btn btn-secondary btn-disabled">Update Status</button>
+                <button className="btn btn-secondary btn-disabled">
+                  Update Status
+                </button>
               </>
             )}
             {userData.role === "admin" && (
               <>
-                <Link to="/dashboard/all-issues" className="btn btn-primary">View All Issues</Link>
-                <Link to="/dashboard/manage-users" className="btn btn-outline">Manage Users</Link>
-                <Link to="/dashboard/add-staff" className="btn btn-outline">Add Staff</Link>
+                <Link to="/dashboard/all-issues" className="btn btn-primary">
+                  View All Issues
+                </Link>
+                <Link to="/dashboard/manage-users" className="btn btn-outline">
+                  Manage Users
+                </Link>
+                <Link to="/dashboard/add-staff" className="btn btn-outline">
+                  Add Staff
+                </Link>
               </>
             )}
           </div>

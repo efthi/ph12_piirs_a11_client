@@ -1,0 +1,8 @@
+{
+  "projects": {
+    "default": "piirs-ea",
+    "prod": "piirs-ea"
+  },
+  "targets": {},
+  "etags": {}
+}

@@ -87,7 +87,7 @@ const Navbar = () => {
               className="btn btn-ghost btn-circle avatar"
             >
               <div className="w-10 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-                <img src={user?.photoURL} alt={user?.displayName} />
+                <img src={user?.photoURL} alt={user?.displayName} referrerPolicy='no-referrer' />
               </div>
             </button>
             {user && (

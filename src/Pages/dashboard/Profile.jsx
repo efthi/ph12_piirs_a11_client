@@ -165,7 +165,7 @@ const handleSubscribe = async () => {
               {/* Profile Photo */}
               <div className="avatar relative">
                 <div className="w-32 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-                  <img src={user?.photoURL} alt={user?.displayName} />
+                  <img src={user?.photoURL} alt={user?.displayName} referrerPolicy='no-referrer' />
                 </div>
                 {userData?.isPremium ? (
                   <div className="absolute -bottom-2 left-1/2 -translate-x-1/2">
